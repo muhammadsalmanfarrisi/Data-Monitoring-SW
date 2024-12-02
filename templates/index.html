@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Monitoring Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            font-weight: 700;
+            text-align: center;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .btn-primary {
+            background-color: #4a90e2;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #357abd;
+        }
+        .table {
+            font-size: 0.9rem;
+        }
+        .form-inline .form-group {
+            margin-right: 15px;
+        }
+        .chart-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            width: 100%;  /* Makes the container responsive */
+            height: 600px; /* Adjust the height as needed */
+        }
+        label {
+            font-weight: 600;
+            color: #555;
+        }
+        .percentage-change {
+            font-size: 1.2rem; /* Increased font size for better visibility */
+            font-weight: 600;
+        }
+
+        .difference {
+            font-size: 1.5rem; /* Larger font size for the actual difference */
+            font-weight: 700;
+            margin-left: 0px;
+        }
+        .total-sw {
+        font-size: 2rem; /* Sesuaikan ukuran sesuai kebutuhan */
+        font-weight: bold;
+        color: #333;
+    }
+    /* Header Styling */
+    .header {
+        background-color: #343a40;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+        position: relative; /* Default behavior */
+    }
+
+    .header a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .header a:hover {
+        text-decoration: underline;
+    }
+
+    /* Optional Body Styling */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f7f9fc;
+        color: #333;
+        margin: 0; /* Ensure no margin around the body */
+        padding: 0;
+    }
+    </style>
+</head>
+<body>
+    
+    <div class="header">
+        <p>Developed by <strong>Muhammad Salman Farrisi</strong> | Universitas Jenderal Soedirman</p>
+        <p><a href="https://github.com/muhammadsalmanfarrisi?tab=repositories" target="_blank">GitHub Repository</a> | <a href="https://wa.me/+6285747931816">Contact Us</a></p>
+    </div>
+    
+    <div class="container mt-5">
+        <h1>Dashboard Monitoring SW Cabang Jawa Tengah</h1>
+        
+        <!-- Total Data Section -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <h3>Total SW 2023</h3>
+                    <p class="display-4 rupiah-value">{{ total_2023 }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <h3>Total SW 2024</h3>
+                    <p class="display-4 rupiah-value">{{ total_2024 }}</p>
+                    <p class="percentage-change">
+                        {% set diff = total_2024 - total_2023 %}
+                        {% set percent_change = (diff / total_2023) * 100 %}
+                        <i class="rupiah-value">{{ diff }}</i> <br>
+                        <span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                            
+                            {% if diff > 0 %}
+                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                            {% elif diff < 0 %}
+                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                            {% else %}
+                                <i class="fa fa-arrow-right"></i> 0%
+                            {% endif %}
+                        </span>
+                    </p>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <button id="startRefreshBtn" class="btn btn-success">Start Auto Refresh</button>
+            <button id="stopRefreshBtn" class="btn btn-danger" style="display: none;">Stop Auto Refresh</button>
+        </div>
+        <!-- Chart Section -->
+        <div class="chart-container mt-5">
+            <canvas id="chartSW" width="400" height="200"></canvas>
+        </div><br>
+        <h1>Perwakilan Purwokerto</h1>
+
+        <!-- Date Selection Form -->
+        <form method="POST" class="mt-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="start_date_2023">Start Date (2023)</label>
+                    <!-- Menambahkan teks petunjuk sebelum input -->
+                    <small class="form-text text-muted">Masukkan tanggal mulai pada tahun 2023</small>
+                    <input type="date" class="form-control" id="start_date_2023" name="start_date_2023" value="{{ start_date_2023 | default('2023-01-01') }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="end_date_2023">End Date (2023)</label>
+                    <!-- Menambahkan teks petunjuk sebelum input -->
+                    <small class="form-text text-muted">Masukkan tanggal selesai pada tahun 2023</small>
+                    <input type="date" class="form-control" id="end_date_2023" name="end_date_2023" value="{{ end_date_2023 | default('2023-12-31') }}">
+                </div>
+            </div>
+                      
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="start_date_2024">Start Date (2024)</label>
+                    <small class="form-text text-muted">Masukkan tanggal mulai pada tahun 2024</small>
+
+                    <input type="date" class="form-control" id="start_date_2024" name="start_date_2024" value="{{ start_date_2024 | default('2024-01-01') }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="end_date_2024">End Date (2024)</label>
+                    <small class="form-text text-muted">Masukkan tanggal mulai pada tahun 2024</small>
+
+                    <input type="date" class="form-control" id="end_date_2024" name="end_date_2024" value="{{ end_date_2024 | default('2024-12-31') }}">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary mt-4" name="form_type" value="form1">Tampilkan Data</button>
+        </form>
+<!-- Diagram Batang untuk Total Jml SW 2023 dan 2024 -->
+<div class="chart-container mt-5 text-center">
+    <h3 class="text-center">Perbandingan Total Jml SW 2023 dan 2024</h3><br>
+    <canvas id="barChartSW" width="400" height="200"></canvas>
+</div>
+
+<script>
+    var barCtx = document.getElementById('barChartSW').getContext('2d');
+    
+    // Gantilah variabel di bawah dengan data yang sesuai dari server
+    var total_jml_sw_2023 = {{ total_jml_sw_2023 }}; // Misalnya 68000000000 untuk 2023
+    var total_jml_sw_2024 = {{ total_jml_sw_2024 }}; // Misalnya 45000000000 untuk 2024
+
+    var barChartSW = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['2023', '2024'],
+            datasets: [{
+                label: 'Total Jml SW',
+                data: [total_jml_sw_2023, total_jml_sw_2024],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)', // Warna batang untuk 2023
+                    'rgba(255, 99, 132, 0.6)'  // Warna batang untuk 2024
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)', 
+                    'rgba(255, 99, 132, 1)'  
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            layout: {
+                padding: {
+                    top: 50 // Memberikan ruang tambahan di atas grafik
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: Math.ceil(total_jml_sw_2023 * 1.1), // Menambah 10% dari nilai maksimum
+                    title: {
+                        display: true,
+                        text: 'Jumlah SW'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Tahun'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false // Menghilangkan legenda di atas diagram batang
+                },
+                datalabels: {
+                    anchor: 'end', // Posisi teks di atas batang
+                    align: 'end',
+                    color: '#333',
+                    font: {
+                        weight: 'bold',
+                        size: 14 // Ukuran font untuk nilai di atas batang
+                    },
+                    formatter: function(value) {
+                        return "Rp " + value.toLocaleString("id-ID"); // Format rupiah
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels] // Mengaktifkan Chart.js Data Labels
+    });
+</script><br><br><br>
+        <!-- Data Tables -->
+        {% if data_2023 or data_2024 %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <h3>Total Jml SW 2023:</h3>
+                    <p><H4>{{ start_date_2023 }} s/d {{ end_date_2023 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2023 }}</span></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <h3>Total Jml SW 2024:</h3>
+                    <p><H4>{{ start_date_2024 }} s/d {{ end_date_2024 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2024 }}</span></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <h3>Growth</h3>
+                    <p><strong>
+                        {% set diff = total_jml_sw_2024 - total_jml_sw_2023 %}
+                        {% set percent_change = (diff / total_jml_sw_2023) * 100 %}
+                    </strong> <span class="rupiah-value total-sw">{{ diff }}</span></p>
+                    <h4><span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                            
+                        {% if diff > 0 %}
+                            <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                        {% elif diff < 0 %}
+                            <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                        {% else %}
+                            <i class="fa fa-arrow-right"></i> 0%
+                        {% endif %}
+                    </span></h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            
+            <div class="col-12">
+                <div class="card">
+                    
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="align-middle">Loket Samsat</th>
+                                <th rowspan="2" class="align-middle">SW 2023</th>
+                                <th rowspan="2" class="align-middle">SW 2024</th>
+                                <th colspan="2">Growth</th>
+                            </tr>
+                            <tr>
+                                <th>Jumlah (Rp)</th>
+                                <th>Persentase (%)</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SAMSAT PURWOKERTO</td>
+                                <td class="rupiah-value">{{ total_purwokerto_2023 }}</td>
+                                <td class="rupiah-value">{{ total_purwokerto }}</td>
+                                {% set diff = total_purwokerto - total_purwokerto_2023 %}
+                                {% set percent_change = (diff / total_purwokerto_2023) * 100 %}
+                                <td class="rupiah-value">{{ diff }}</td>
+                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                                            
+                                            {% if diff > 0 %}
+                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                                            {% elif diff < 0 %}
+                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                                            {% else %}
+                                                <i class="fa fa-arrow-right"></i> 0%
+                                            {% endif %}
+                                        </td>
+                            
+                                
+                            </tr>
+                            <tr>
+                                <td>SAMSAT PURBALINGGA</td>
+                                <td class="rupiah-value">{{ total_purbalingga_2023 }}</td>
+                                <td class="rupiah-value">{{ total_purbalingga }}</td>
+                                {% set diff = total_purbalingga - total_purbalingga_2023 %}
+                                {% set percent_change = (diff / total_purbalingga_2023) * 100 %}
+                                <td class="rupiah-value">{{ diff }}</td>
+                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                                            
+                                            {% if diff > 0 %}
+                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                                            {% elif diff < 0 %}
+                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                                            {% else %}
+                                                <i class="fa fa-arrow-right"></i> 0%
+                                            {% endif %}
+                                        </td>
+                            </tr>
+                            <tr>
+                                <td>SAMSAT BANJARNEGARA</td>
+                                <td class="rupiah-value">{{ total_banjarnegara_2023 }}</td>
+                                <td class="rupiah-value">{{ total_banjarnegara }}</td>
+                                {% set diff = total_banjarnegara - total_banjarnegara_2023 %}
+                                {% set percent_change = (diff / total_banjarnegara_2023) * 100 %}
+                                <td class="rupiah-value">{{ diff }}</td>
+                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                                            
+                                            {% if diff > 0 %}
+                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                                            {% elif diff < 0 %}
+                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                                            {% else %}
+                                                <i class="fa fa-arrow-right"></i> 0%
+                                            {% endif %}
+                                        </td>
+                            </tr>
+                            <tr>
+                                <td>SAMSAT MAJENANG</td>
+                                <td class="rupiah-value">{{ total_majenang_2023 }}</td>
+                                <td class="rupiah-value">{{ total_majenang }}</td>
+                                {% set diff = total_majenang - total_majenang_2023 %}
+                                {% set percent_change = (diff / total_majenang_2023) * 100 %}
+                                <td class="rupiah-value">{{ diff }}</td>
+                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                                            
+                                            {% if diff > 0 %}
+                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                                            {% elif diff < 0 %}
+                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                                            {% else %}
+                                                <i class="fa fa-arrow-right"></i> 0%
+                                            {% endif %}
+                                        </td>
+                            </tr>
+                            <tr>
+                                <td>SAMSAT CILACAP</td>
+                                <td class="rupiah-value">{{ total_cilacap_2023 }}</td>
+                                <td class="rupiah-value">{{ total_cilacap }}</td>
+                                {% set diff = total_cilacap - total_cilacap_2023 %}
+                                {% set percent_change = (diff / total_cilacap_2023) * 100 %}
+                                <td class="rupiah-value">{{ diff }}</td>
+                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                                            
+                                            {% if diff > 0 %}
+                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                                            {% elif diff < 0 %}
+                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                                            {% else %}
+                                                <i class="fa fa-arrow-right"></i> 0%
+                                            {% endif %}
+                                        </td>
+                            </tr>
+                            <tr>
+                                <td>SAMSAT WANGON</td>
+                                <td class="rupiah-value">{{ total_wangon }}</td>
+                                <td class="rupiah-value">{{ total_wangon }}</td>
+                                {% set diff = total_wangon - total_wangon_2023 %}
+                                {% set percent_change = (diff / total_wangon_2023) * 100 %}
+                                <td class="rupiah-value">{{ diff }}</td>
+                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                                            
+                                            {% if diff > 0 %}
+                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                                            {% elif diff < 0 %}
+                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                                            {% else %}
+                                                <i class="fa fa-arrow-right"></i> 0%
+                                            {% endif %}
+                                        </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    
+
+                    
+                </div>
+            </div>
+            
+        </div>
+        {% endif %}
+
+<br><br><br><br>
+        <h1>Dashboard Monitoring SW Perwakilan Purwokerto</h1>
+        
+        <!-- Total Data Section -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <h3>Total SW 2023</h3>
+                    <p class="display-4 rupiah-value">{{ total_2023_purwokerto }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <h3>Total SW 2024</h3>
+                    <p class="display-4 rupiah-value">{{ total_2024_purwokerto }}</p>
+                    <p class="percentage-change">
+                        {% set diff = total_2024_purwokerto - total_2023_purwokerto %}
+                        {% set percent_change = (diff / total_2023_purwokerto) * 100 %}
+                        <i class="rupiah-value">{{ diff }}</i> <br>
+                        <span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                            
+                            {% if diff > 0 %}
+                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                            {% elif diff < 0 %}
+                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                            {% else %}
+                                <i class="fa fa-arrow-right"></i> 0%
+                            {% endif %}
+                        </span>
+                    </p>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-container mt-5">
+            <canvas id="chartSW_purwokerto" width="400" height="200"></canvas>
+        </div>
+     
+
+
+        <script>
+            var ctx = document.getElementById('chartSW').getContext('2d');
+            var chartSW = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: '2023',
+                            data: {{ bulanan_2023 }},
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: false
+                        },
+                        {
+                            label: '2024',
+                            data: {{ bulanan_2024 }},
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah SW'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bulan'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#333',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+        <script>
+            var ctx = document.getElementById('chartSW_purwokerto').getContext('2d');
+            var chartSW = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [
+                        {
+                            label: '2023',
+                            data: {{ bulanan_2023_purwokerto }},
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: false
+                        },
+                        {
+                            label: '2024',
+                            data: {{ bulanan_2024_purwokerto }},
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah SW'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bulan'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#333',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+        <script>
+            function formatRupiah(value) {
+                return "Rp " + value.toLocaleString("id-ID");
+            }
+        
+            // Lakukan format saat rendering halaman jika data berasal dari backend langsung.
+            document.querySelectorAll(".display-4, .rupiah-value").forEach(element => {
+                element.textContent = formatRupiah(parseFloat(element.textContent.replace(/[^0-9.-]+/g,"")));
+            });
+            
+        </script>
+        <script>
+            // Fungsi untuk mengatur sinkronisasi tanggal antar tahun
+            function syncDatesMutually(sourceId, targetId, yearOffset) {
+                const sourceInput = document.getElementById(sourceId);
+                const targetInput = document.getElementById(targetId);
+        
+                function updateTarget() {
+                    const sourceDate = new Date(sourceInput.value);
+                    if (!isNaN(sourceDate)) {
+                        const targetDate = new Date(sourceDate);
+                        targetDate.setFullYear(sourceDate.getFullYear() + yearOffset);
+                        targetInput.value = targetDate.toISOString().split('T')[0];
+                    }
+                }
+        
+                function updateSource() {
+                    const targetDate = new Date(targetInput.value);
+                    if (!isNaN(targetDate)) {
+                        const sourceDate = new Date(targetDate);
+                        sourceDate.setFullYear(targetDate.getFullYear() - yearOffset);
+                        sourceInput.value = sourceDate.toISOString().split('T')[0];
+                    }
+                }
+        
+                sourceInput.addEventListener('change', updateTarget);
+                targetInput.addEventListener('change', updateSource);
+            }
+        
+            // Sinkronisasi dua arah antara tahun 2023 dan 2024
+            syncDatesMutually('start_date_2023', 'start_date_2024', 1);
+            syncDatesMutually('end_date_2023', 'end_date_2024', 1);
+        </script>
+        <script>
+            var refreshInterval;
+        
+            // Fungsi untuk memulai auto-refresh
+            function startAutoRefresh() {
+                refreshInterval = setInterval(function () {
+                    // Simpan posisi scroll sebelum refresh
+                    localStorage.setItem('scrollPosition', window.scrollY);
+                    location.reload();
+                }, 60000); // Refresh setiap 1 detik
+                document.getElementById('startRefreshBtn').style.display = 'none';
+                document.getElementById('stopRefreshBtn').style.display = 'inline-block';
+        
+                // Simpan status auto-refresh di localStorage
+                localStorage.setItem('autoRefresh', 'true');
+            }
+        
+            // Fungsi untuk menghentikan auto-refresh
+            function stopAutoRefresh() {
+                clearInterval(refreshInterval);
+                document.getElementById('startRefreshBtn').style.display = 'inline-block';
+                document.getElementById('stopRefreshBtn').style.display = 'none';
+        
+                // Hapus status auto-refresh dari localStorage
+                localStorage.removeItem('autoRefresh');
+            }
+        
+            // Fungsi untuk memulihkan posisi scroll
+            function restoreScrollPosition() {
+                const savedPosition = localStorage.getItem('scrollPosition');
+                if (savedPosition !== null) {
+                    window.scrollTo(0, parseInt(savedPosition, 10));
+                }
+                // Hapus posisi scroll setelah dipulihkan
+                localStorage.removeItem('scrollPosition');
+            }
+        
+            // Event listener tombol Start Refresh
+            document.getElementById('startRefreshBtn').addEventListener('click', startAutoRefresh);
+        
+            // Event listener tombol Stop Refresh
+            document.getElementById('stopRefreshBtn').addEventListener('click', stopAutoRefresh);
+        
+            // Cek status auto-refresh dan posisi scroll saat halaman dimuat
+            window.onload = function () {
+                restoreScrollPosition(); // Pulihkan posisi scroll
+        
+                if (localStorage.getItem('autoRefresh') === 'true') {
+                    startAutoRefresh(); // Mulai auto-refresh jika status tersimpan di localStorage
+                }
+        
+                // Tangani form resubmission (jika diperlukan)
+                if (window.performance && window.performance.navigation.type === 2) {
+                    setTimeout(function () {
+                        document.querySelector('button[type="submit"]').click(); // Submit form otomatis
+                    }, 500); // Sesuaikan delay jika diperlukan
+                }
+            };
+        </script>
+        
+        
+        
+        
+    </div>
+    <footer class="text-center mt-5 py-3" style="background-color: #f3f4f6; color: #555;">
+        <p>Dibuat oleh <strong>Muhammad Salman Farrisi</strong>, <em>Universitas Jenderal Soedirman</em></p>
+    </footer>
+    
+</body>
+</html>
