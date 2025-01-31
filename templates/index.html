@@ -201,80 +201,8 @@
             <button type="submit" class="btn btn-primary mt-4" name="form_type" value="form1">Tampilkan Data</button>
         </form>
 <!-- Diagram Batang untuk Total Jml SW 2023 dan 2024 -->
-<div class="chart-container mt-5 text-center">
-    <h3 class="text-center">Perbandingan Total Jml SW {{ previous_year }} dan {{ current_year }}</h3><br>
-    <canvas id="barChartSW" width="400" height="200"></canvas>
-</div>
 
-<script>
-    var barCtx = document.getElementById('barChartSW').getContext('2d');
-    
-    // Gantilah variabel di bawah dengan data yang sesuai dari server
-    var total_jml_sw_2023 = {{ total_jml_sw_2023 }}; // Misalnya 68000000000 untuk 2023
-    var total_jml_sw_2024 = {{ total_jml_sw_2024 }}; // Misalnya 45000000000 untuk 2024
-
-    var barChartSW = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-            labels: ['{{ previous_year }}', '{{ current_year }}'],
-            datasets: [{
-                label: 'Total Jml SW',
-                data: [total_jml_sw_2023, total_jml_sw_2024],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)', // Warna batang untuk 2023
-                    'rgba(255, 99, 132, 0.6)'  // Warna batang untuk 2024
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)', 
-                    'rgba(255, 99, 132, 1)'  
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            layout: {
-                padding: {
-                    top: 50 // Memberikan ruang tambahan di atas grafik
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: Math.ceil(total_jml_sw_2023 * 1.1), // Menambah 10% dari nilai maksimum
-                    title: {
-                        display: true,
-                        text: 'Jumlah SW'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Tahun'
-                    }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false // Menghilangkan legenda di atas diagram batang
-                },
-                datalabels: {
-                    anchor: 'end', // Posisi teks di atas batang
-                    align: 'end',
-                    color: '#333',
-                    font: {
-                        weight: 'bold',
-                        size: 14 // Ukuran font untuk nilai di atas batang
-                    },
-                    formatter: function(value) {
-                        return "Rp " + value.toLocaleString("id-ID"); // Format rupiah
-                    }
-                }
-            }
-        },
-        plugins: [ChartDataLabels] // Mengaktifkan Chart.js Data Labels
-    });
-</script><br><br><br>
+<br><br><br>
         <!-- Data Tables -->
         {% if data_2023 or data_2024 %}
         <div class="row">
@@ -359,6 +287,80 @@
             </div>
             
         </div>
+        <div class="chart-container mt-5 text-center">
+            <h3 class="text-center">Perbandingan Total Jml SW {{ previous_year }} dan {{ current_year }}</h3><br>
+            <canvas id="barChartSW" width="400" height="200"></canvas>
+        </div>
+        <script>
+            var barCtx = document.getElementById('barChartSW').getContext('2d');
+            
+            // Gantilah variabel di bawah dengan data yang sesuai dari server
+            var total_jml_sw_2023 = {{ total_jml_sw_2023 }}; // Misalnya 68000000000 untuk 2023
+            var total_jml_sw_2024 = {{ total_jml_sw_2024 }}; // Misalnya 45000000000 untuk 2024
+        
+            var barChartSW = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['{{ previous_year }}', '{{ current_year }}'],
+                    datasets: [{
+                        label: 'Total Jml SW',
+                        data: [total_jml_sw_2023, total_jml_sw_2024],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',  // Warna batang untuk 2024
+                            'rgba(75, 192, 192, 0.6)' // Warna batang untuk 2023
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',  
+                            'rgba(75, 192, 192, 1)' 
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: {
+                            top: 50 // Memberikan ruang tambahan di atas grafik
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: Math.ceil(total_jml_sw_2023 * 1.1), // Menambah 10% dari nilai maksimum
+                            title: {
+                                display: true,
+                                text: 'Jumlah SW'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tahun'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // Menghilangkan legenda di atas diagram batang
+                        },
+                        datalabels: {
+                            anchor: 'end', // Posisi teks di atas batang
+                            align: 'end',
+                            color: '#333',
+                            font: {
+                                weight: 'bold',
+                                size: 14 // Ukuran font untuk nilai di atas batang
+                            },
+                            formatter: function(value) {
+                                return "Rp " + value.toLocaleString("id-ID"); // Format rupiah
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels] // Mengaktifkan Chart.js Data Labels
+            });
+        </script>
+        
         {% endif %}
 
         
@@ -376,7 +378,7 @@
                         {
                             label: '{{ previous_year }}',
                             data: {{ bulanan_2023 }},
-                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 2,
                             pointRadius: 4,
                             pointHoverRadius: 6,
@@ -385,7 +387,7 @@
                         {
                             label: '{{ current_year }}',
                             data: {{ bulanan_2024 }},
-                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
                             borderWidth: 2,
                             pointRadius: 4,
                             pointHoverRadius: 6,
