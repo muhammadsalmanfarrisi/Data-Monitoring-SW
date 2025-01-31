@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Monitoring SW {{ data_kantor.kantor_jr }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            text-align: center;
+        }
+        .card-body {
+            padding: 20px;
+            font-size: 1.1rem;
+        }
+        .rupiah-value {
+            font-size: 1.5rem;
+            color: #28a745;
+            font-weight: bold;
+        }
+        .growth-up {
+            color: #28a745;
+        }
+        .growth-down {
+            color: #dc3545;
+        }
+        .table thead {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .text-success {
+            color: #28a745 !important;
+        }
+        .text-danger {
+            color: #dc3545 !important;
+        }
+        .fa-arrow-up, .fa-arrow-down {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <h1 class="text-center mb-4">Dashboard Monitoring SW {{ kantor_jr }}</h1>
+    <!-- Diagram Batang untuk Total Jml SW 2023 dan 2024 -->
+<div class="chart-container mt-5 text-center">
+    <h3 class="text-center">Perbandingan Total Jml SW 2023 dan 2024</h3><br>
+    <canvas id="barChartSW" width="400" height="200"></canvas>
+</div>
+
+<script>
+    var barCtx = document.getElementById('barChartSW').getContext('2d');
+    
+    // Gantilah variabel di bawah dengan data yang sesuai dari server
+    var total_jml_sw_2023 = {{ total_jml_sw_2023 }}; // Misalnya 68000000000 untuk 2023
+    var total_jml_sw_2024 = {{ total_jml_sw_2024 }}; // Misalnya 45000000000 untuk 2024
+
+    var barChartSW = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['2023', '2024'],
+            datasets: [{
+                label: 'Total Jml SW',
+                data: [total_jml_sw_2023, total_jml_sw_2024],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.6)', // Warna batang untuk 2023
+                    'rgba(255, 99, 132, 0.6)'  // Warna batang untuk 2024
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)', 
+                    'rgba(255, 99, 132, 1)'  
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            layout: {
+                padding: {
+                    top: 50 // Memberikan ruang tambahan di atas grafik
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: Math.ceil(total_jml_sw_2023 * 1.1), // Menambah 10% dari nilai maksimum
+                    title: {
+                        display: true,
+                        text: 'Jumlah SW'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Tahun'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false // Menghilangkan legenda di atas diagram batang
+                },
+                datalabels: {
+                    anchor: 'end', // Posisi teks di atas batang
+                    align: 'end',
+                    color: '#333',
+                    font: {
+                        weight: 'bold',
+                        size: 14 // Ukuran font untuk nilai di atas batang
+                    },
+                    formatter: function(value) {
+                        return "Rp " + value.toLocaleString("id-ID"); // Format rupiah
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels] // Mengaktifkan Chart.js Data Labels
+    });
+</script>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Total Jml SW 2023</div>
+                <div class="card-body">
+                    <h4>{{ start_date_2023 }} s/d {{ end_date_2023 }}</h4>
+                    <p class="rupiah-value">{{ total_jml_sw_2023 }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Total Jml SW 2024</div>
+                <div class="card-body">
+                    <h4>{{ start_date_2024 }} s/d {{ end_date_2024 }}</h4>
+                    <p class="rupiah-value">{{ total_jml_sw_2024 }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Growth</div>
+                <div class="card-body">
+                    {% set diff = total_jml_sw_2024 - total_jml_sw_2023 %}
+                    {% set percent_change = (diff / total_jml_sw_2023) * 100 %}
+                    <p class="rupiah-value">{{ diff }}</p>
+                    <h4 class="{{ 'growth-up' if diff > 0 else 'growth-down' }}">
+                        {% if diff > 0 %}
+                            <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                        {% elif diff < 0 %}
+                            <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                        {% else %}
+                            <i class="fa fa-arrow-right"></i> 0%
+                        {% endif %}
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">Data Kantor {{ kantor_jr }}</div>
+                <div class="card-body">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="align-middle">Kantor</th>
+                                <th rowspan="2" class="align-middle">SW 2023</th>
+                                <th rowspan="2" class="align-middle">SW 2024</th>
+                                <th colspan="2">Growth</th>
+                            </tr>
+                            <tr>
+                                <th>Jumlah (Rp)</th>
+                                <th>Persentase (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in data_kantor %}
+                                <tr>
+                                    <td>{{ item.kantor_jr }}</td>
+                                    <td class="rupiah-value">{{ item.total_sw_2023 }}</td>
+                                    <td class="rupiah-value">{{ item.total_sw_2024 }}</td>
+                                    {% set diff = item.total_sw_2024 - item.total_sw_2023 %}
+                                    {% set percent_change = (diff / item.total_sw_2023) * 100 if item.total_sw_2023 != 0 else 0 %}
+                                    <td class="rupiah-value">{{ diff }}</td>
+                                    <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                                        {% if diff > 0 %}
+                                            <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                                        {% elif diff < 0 %}
+                                            <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                                        {% else %}
+                                            <i class="fa fa-arrow-right"></i> 0%
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function formatRupiah(value) {
+        return "Rp " + value.toLocaleString("id-ID");
+    }
+
+    // Lakukan format saat rendering halaman jika data berasal dari backend langsung.
+    document.querySelectorAll(".display-4, .rupiah-value").forEach(element => {
+        element.textContent = formatRupiah(parseFloat(element.textContent.replace(/[^0-9.-]+/g,"")));
+    });
+    
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0-beta.2/dist/chartjs-plugin-datalabels.min.js"></script>
+
+</body>
+</html>

@@ -329,11 +329,11 @@
                         <tbody>
                             {% for item in data_kantor %}
                             <tr>
-                                <td>{{ item.kantor_jr }}</td>
+                                <td><a href="{{ url_for('halaman_tertuju', kode_kantor_jr=item.kode_kantor_jr) }}?kantor_jr={{ item.kantor_jr }}" target="_blank">{{ item.kantor_jr }}</a></td>
                                 <td class="rupiah-value">{{ item.total_sw_2023 }}</td>
                                 <td class="rupiah-value">{{ item.total_sw_2024 }}</td>
                                 {% set diff = item.total_sw_2024 - item.total_sw_2023 %}
-                                {% set percent_change = (diff / item.total_sw_2023) * 100 %}
+                                {% set percent_change = (diff / item.total_sw_2023) * 100 if item.total_sw_2023 != 0 else 0 %}
                                 <td class="rupiah-value">{{ diff }}</td>
                                         <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
                                             
@@ -358,8 +358,6 @@
         </div>
         {% endif %}
 
-<br><br><br><br>
-        <h1>Dashboard Monitoring SW Perwakilan Purwokerto</h1>
         
         
      

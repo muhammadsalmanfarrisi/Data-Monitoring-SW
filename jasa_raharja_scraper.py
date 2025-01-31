@@ -187,7 +187,7 @@ def index():
             # Gabungkan data per kantor
             data_kantor = gabungkan_data_per_kantor(data_2023, data_2024)
 
-            return render_template('index.html', data_kantor=data_kantor, total_jml_sw_2023=total_jml_sw_2023,
+            return render_template('index.html', data_2023=data_2023, data_2024=data_2024,data_kantor=data_kantor, total_jml_sw_2023=total_jml_sw_2023,
                                    total_jml_sw_2024=total_jml_sw_2024, start_date_2023=start_date_2023,
                                    end_date_2023=end_date_2023, start_date_2024=start_date_2024, 
                                    end_date_2024=end_date_2024, bulanan_2023=bulanan_2023, total_2023=total_2023,
@@ -196,234 +196,42 @@ def index():
     return render_template('index.html', data_kantor=data_kantor, data_2023=None, data_2024=None, 
                            bulanan_2023=bulanan_2023, total_2023=total_2023, bulanan_2024=bulanan_2024, total_2024=total_2024)
 
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-#     bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023)
-#     bulanan_2024, total_2024 = ambil_total_bulanan_paralel(2024)  # Bulan Januari - Desember 2024
-    
-#     if request.method == 'POST':
-#         form_type = request.form.get('form_type')
 
-#         if form_type == 'form1':
-#             # Mendapatkan tanggal mulai dan tanggal akhir untuk dua rentang (2023 dan 2024)
-#             bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023)
-#             bulanan_2024, total_2024 = ambil_total_bulanan_paralel(2024)
-#             start_date_2023 = request.form['start_date_2023']
-#             end_date_2023 = request.form['end_date_2023']
-#             start_date_2024 = request.form['start_date_2024']
-#             end_date_2024 = request.form['end_date_2024']
-            
-#             url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_0400300_2?_=1731895548035'
-#             url_2024 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2024}_{end_date_2024}_0400300_2?_=1731895548035'
-            
-#             data_2023, total_jml_sw_2023 = ambil_data(url_2023)
-#             data_2024, total_jml_sw_2024 = ambil_data(url_2024)
+@app.route('/halaman_tertuju/<kode_kantor_jr>', methods=['GET', 'POST'])
+def halaman_tertuju(kode_kantor_jr):
+    kantor_jr_query = request.args.get('kantor_jr', kode_kantor_jr)
+    # Mendapatkan tanggal mulai dan akhir untuk dua rentang (2023 dan 2024)
+    start_date_2023 = request.form.get('start_date_2023', '2023-01-01')
+    end_date_2023 = request.form.get('end_date_2023', '2023-12-31')
+    start_date_2024 = request.form.get('start_date_2024', '2024-01-01')
+    end_date_2024 = request.form.get('end_date_2024', '2024-12-31')
 
-#             return render_template('index.html', data_2023=data_2023, total_jml_sw_2023=total_jml_sw_2023,
-#                                    data_2024=data_2024, total_jml_sw_2024=total_jml_sw_2024,
-#                                    start_date_2023=start_date_2023, end_date_2023=end_date_2023,
-#                                    start_date_2024=start_date_2024, end_date_2024=end_date_2024, bulanan_2023=bulanan_2023, total_2023=total_2023,
-#                            bulanan_2024=bulanan_2024, total_2024=total_2024)
-        
-#     return render_template('index.html', data_2023=None, data_2024=None, bulanan_2023=bulanan_2023, total_2023=total_2023,
-#                            bulanan_2024=bulanan_2024, total_2024=total_2024)
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-#     bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023)
-#     bulanan_2024, total_2024 = ambil_total_bulanan_paralel(2024)  # Bulan Januari - Desember 2024
-#     bulanan_2023_purwokerto, total_2023_purwokerto = ambil_total_bulanan_paralel_purwokerto(2023)
-#     bulanan_2024_purwokerto, total_2024_purwokerto = ambil_total_bulanan_paralel_purwokerto(2024)  # Bulan Januari - Desember 2024
+    # URL API untuk data 2023 dan 2024 dengan kode_kantor_jr
+    url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_{kode_kantor_jr}_2?_=1731895548035'
+    url_2024 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2024}_{end_date_2024}_{kode_kantor_jr}_2?_=1731895548035'
 
-#     # Initialize totals for each SAMSAT branch
-#     total_purwokerto = 0
-#     total_purbalingga = 0
-#     total_banjarnegara = 0
-#     total_majenang = 0
-#     total_cilacap = 0
-#     total_wangon = 0
-#     total_purwokerto_2023 = 0
-#     total_purbalingga_2023 = 0
-#     total_banjarnegara_2023 = 0
-#     total_majenang_2023 = 0
-#     total_cilacap_2023 = 0
-#     total_wangon_2023 = 0
-#     # Loop through the data_2024 and calculate totals for each SAMSAT branch
-    
+    # Ambil data API untuk 2023 dan 2024
+    data_2023, total_jml_sw_2023 = ambil_data(url_2023)
+    data_2024, total_jml_sw_2024 = ambil_data(url_2024)
 
-#     if request.method == 'POST':
-#         form_type = request.form.get('form_type')
-#         if form_type == 'form1':
-#             # Mendapatkan tanggal mulai dan tanggal akhir untuk dua rentang (2023 dan 2024)
-#             start_date_2023 = request.form['start_date_2023']
-#             end_date_2023 = request.form['end_date_2023']
-#             start_date_2024 = request.form['start_date_2024']
-#             end_date_2024 = request.form['end_date_2024']
-            
-#             url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_0400300_2?_=1731895548035'
-#             url_2024 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2024}_{end_date_2024}_0400300_2?_=1731895548035'
-            
-#             data_2023, total_jml_sw_2023 = ambil_data(url_2023)
-#             data_2024, total_jml_sw_2024 = ambil_data(url_2024)
-#             if data_2024:
-#                     for item in data_2024:
-#                         if item['kantor_jr'] in ['SAMSAT PURWOKERTO', 'SAMSAT PURWOKERTO II', 'SAMSAT CEPAT PURWOKERTO', 
-#                                                 'SAMSAT PURWOKERTO III', 'SAMSAT PATEN SOKARAJA', 'SAMSAT RITA MALL PURWOKERTO', 
-#                                                 'SAMSAT RITA MALL PURWOKERTO MALAM']:
-#                             total_purwokerto += item['jml_sw']
-#                         elif item['kantor_jr'] in ['SAMSAT PURBALINGGA', 'SAMSAT PURBALINGGA II', 'SAMSAT PATEN BUKATEJA', 
-#                                                 'SAMSAT MALAM PURBALINGGA']:
-#                             total_purbalingga += item['jml_sw']
-#                         elif item['kantor_jr'] in ['SAMSAT BANJARNEGARA', 'SAMSAT KELILING BANJARNEGARA', 
-#                                                 'SAMSAT KELILING BANJARNEGARA II', 'SAMSAT GERAI SWALAYAN PELITA']:
-#                             total_banjarnegara += item['jml_sw']
-#                         elif item['kantor_jr'] == 'SAMSAT MAJENANG':
-#                             total_majenang += item['jml_sw']
-#                         elif item['kantor_jr'] in ['SAMSAT CILACAP', 'SAMSAT CILACAP II', 'SAMSAT KELILING CILACAP MALAM']:
-#                             total_cilacap += item['jml_sw']
-#                         elif item['kantor_jr'] in ['SAMSAT WANGON', 'SAMSAT KELILING WANGON']:
-#                             total_wangon += item['jml_sw']
-                            
-#             if data_2023:
-#                 for item in data_2023:
-#                     if item['kantor_jr'] in ['SAMSAT PURWOKERTO', 'SAMSAT PURWOKERTO II', 'SAMSAT CEPAT PURWOKERTO', 
-#                                             'SAMSAT PURWOKERTO III', 'SAMSAT PATEN SOKARAJA', 'SAMSAT RITA MALL PURWOKERTO', 
-#                                             'SAMSAT RITA MALL PURWOKERTO MALAM']:
-#                         total_purwokerto_2023 += item['jml_sw']
-#                     elif item['kantor_jr'] in ['SAMSAT PURBALINGGA', 'SAMSAT PURBALINGGA II', 'SAMSAT PATEN BUKATEJA', 
-#                                             'SAMSAT MALAM PURBALINGGA']:
-#                         total_purbalingga_2023 += item['jml_sw']
-#                     elif item['kantor_jr'] in ['SAMSAT BANJARNEGARA', 'SAMSAT KELILING BANJARNEGARA', 
-#                                             'SAMSAT KELILING BANJARNEGARA II', 'SAMSAT GERAI SWALAYAN PELITA']:
-#                         total_banjarnegara_2023 += item['jml_sw']
-#                     elif item['kantor_jr'] == 'SAMSAT MAJENANG':
-#                         total_majenang_2023 += item['jml_sw']
-#                     elif item['kantor_jr'] in ['SAMSAT CILACAP', 'SAMSAT CILACAP II', 'SAMSAT KELILING CILACAP MALAM']:
-#                         total_cilacap_2023 += item['jml_sw']
-#                     elif item['kantor_jr'] in ['SAMSAT WANGON', 'SAMSAT KELILING WANGON']:
-#                         total_wangon_2023 += item['jml_sw']
-                        
-#             return render_template('index.html', data_2023=data_2023, total_jml_sw_2023=total_jml_sw_2023,
-#                                    data_2024=data_2024, total_jml_sw_2024=total_jml_sw_2024,
-#                                    start_date_2023=start_date_2023, end_date_2023=end_date_2023,
-#                                    start_date_2024=start_date_2024, end_date_2024=end_date_2024,
-#                                    bulanan_2023=bulanan_2023, total_2023=total_2023,
-#                                    bulanan_2024=bulanan_2024, total_2024=total_2024,
-#                                    bulanan_2023_purwokerto=bulanan_2023_purwokerto, total_2023_purwokerto=total_2023_purwokerto,
-#                                    bulanan_2024_purwokerto=bulanan_2024_purwokerto, total_2024_purwokerto=total_2024_purwokerto,
-#                                    total_purwokerto=total_purwokerto, total_purbalingga=total_purbalingga,
-#                                    total_banjarnegara=total_banjarnegara, total_majenang=total_majenang,
-#                                    total_cilacap=total_cilacap, total_wangon=total_wangon, total_purwokerto_2023=total_purwokerto_2023, total_purbalingga_2023=total_purbalingga_2023,
-#                                    total_banjarnegara_2023=total_banjarnegara_2023, total_majenang_2023=total_majenang_2023,
-#                                    total_cilacap_2023=total_cilacap_2023, total_wangon_2023=total_wangon_2023)
+    # Gabungkan data per kantor
+    data_kantor = gabungkan_data_per_kantor(data_2023, data_2024)
 
-#     return render_template('index.html', data_2023=None, data_2024=None, bulanan_2023=bulanan_2023, total_2023=total_2023,
-#                            bulanan_2024=bulanan_2024, total_2024=total_2024,
-#                            bulanan_2023_purwokerto=bulanan_2023_purwokerto, total_2023_purwokerto=total_2023_purwokerto,
-#                                    bulanan_2024_purwokerto=bulanan_2024_purwokerto, total_2024_purwokerto=total_2024_purwokerto,
-#                            total_purwokerto=total_purwokerto, total_purbalingga=total_purbalingga,
-#                            total_banjarnegara=total_banjarnegara, total_majenang=total_majenang,
-#                            total_cilacap=total_cilacap, total_wangon=total_wangon, total_purwokerto_2023=total_purwokerto_2023, total_purbalingga_2023=total_purbalingga_2023,
-#                                    total_banjarnegara_2023=total_banjarnegara_2023, total_majenang_2023=total_majenang_2023,
-#                                    total_cilacap_2023=total_cilacap_2023, total_wangon_2023=total_wangon_2023)
+    # Menghitung perbedaan dan perubahan persentase
+    diff = total_jml_sw_2024 - total_jml_sw_2023
+    percent_change = (diff / total_jml_sw_2023) * 100 if total_jml_sw_2023 != 0 else 0
+
+    return render_template('halaman_tertuju.html',
+                           data_kantor=data_kantor,
+                           total_jml_sw_2023=total_jml_sw_2023,
+                           total_jml_sw_2024=total_jml_sw_2024,
+                           start_date_2023=start_date_2023,
+                           end_date_2023=end_date_2023,
+                           start_date_2024=start_date_2024,
+                           end_date_2024=end_date_2024,
+                           diff=diff,
+                           percent_change=percent_change, kantor_jr=kantor_jr_query)
 
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5555)
-
-# from flask import Flask, render_template, request
-# from datetime import datetime
-# from calendar import monthrange
-# from concurrent.futures import ThreadPoolExecutor, as_completed
-# import requests
-# import time
-
-# app = Flask(__name__)
-
-# # Konfigurasi untuk ThreadPoolExecutor
-# MAX_THREADS = 5
-
-# # Fungsi untuk mengambil data dengan retry dan timeout
-# def ambil_data(url, retries=3, timeout=10):
-#     cookies = {  # Ganti dengan cookies Anda
-#                 'XSRF-TOKEN': 'eyJpdiI6IlM5REZ4YmhiTGlDQVZVYVlacG9zYnc9PSIsInZhbHVlIjoiWXhLSzN6MmdiZVJTTDJKTVVnRmVXOGt1WFNVaE5GY0RZNUZFb3dqaVZKdUpBQUJ6YnlkdlhFanh4Vmt6ZTR1aXA5TGM3Skh5K0MyZUcrTlZ5ak9WRWhCTW1zSlc2dVRHdStKUHQ5RXVGcHBRZ2FJc0NmaVY5TGZyQ25xbTRJZksiLCJtYWMiOiJmYTYzYWU3MjkzYjEyMTcxYzg1MTVlMDQwMmViNWY3ZWY4ZWMzZmZjNzE0YzUwNWY3ZWQ0ZmRiY2QwZDlkOTU4IiwidGFnIjoiIn0%3D',
-#         '_ga': 'GA1.1.140722331.1727057868',
-#         '_ga_JQ088T32QP': 'GS1.1.1727061610.2.1.1727061629.0.0.0', 
-#         '_ga_VNWN27RPNX': 'GS1.3.1727061611.2.0.1727061611.60.0.0', 
-#         'ceri_session': 'eyJpdiI6InRuSXVmZ3BoM25JZnY4R2MxZjZmN0E9PSIsInZhbHVlIjoiRjJtZm9ET3Bpa3BZTW84SXN3dzQyT1l0QXZvcFBLajByV3lxVlgzM21VZ2RlKy9IVm1CZGdIRG83eU9uWmpOS1BuOS9EYXBWZkpKbE54dzAvcWxCVDJCWDlHTVcveTlHbmJzbkpYV2M2ZjFTTEF4UFNzT2VSUjAyOEhjekNQRjkiLCJtYWMiOiI2ZWE3YjBhZWI2OWNkYTUwMjMzNzczZmQ2YmUyOTdlNTQ2ZGRjMzhhYThiOWYxYjJkYTk2YzM0ZGY3YjUwMTNkIiwidGFnIjoiIn0%3D',
-#         'cookiesession1': '678B28C4BA1B09254D21278D87A606A5',
-#         'jr_cookie': '98122d81101bed08eedde6ce1a474d67',
-#         'remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d': 'eyJpdiI6Ii9LaXhRV1dOY21TZ3NZL1E1b3BRVmc9PSIsInZhbHVlIjoiSTkwVDA1elBsaSsySXk2TDN4TldjMlBSV3FVSHRCeFJIUGZDQTNwWGtzOTdONUZkNkl5bVc0Yy9VSkZNQy9LL3Zub0dHVTh3Z3FvazdQaEFGb1hSM1g0WTdtZjVkcDcxbFFFeC9tTHUxTis1T01mTU5CSVhVMkZ1NXBMbW9IcnBSMjkxeVVzMHNZMHhPT3FsNlFRRGRBPT0iLCJtYWMiOiI2NzM5NGNlNzYwMmQyNWExNjQzNWY5OWQyZDRkNTA1YmRlYjQyZDVjMTc2MjJjZmVlYjk2YjE2NzNkOWFhMWViIiwidGFnIjoiIn0%3D'
-#         # Tambahkan cookies lainnya
-#     }
-#     headers = {
-#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
-#     }
-    
-#     for attempt in range(retries):
-#         try:
-#             response = requests.get(url, headers=headers, cookies=cookies, timeout=timeout)
-#             if response.status_code == 200:
-#                 return response.json()
-#             else:
-#                 print(f"Error {response.status_code} for URL: {url}")
-#         except requests.exceptions.RequestException as e:
-#             print(f"Request failed on attempt {attempt + 1}: {e}")
-#             time.sleep(2)  # Tunggu sebelum mencoba lagi
-#     return None
-
-# # Fungsi untuk menghitung total bulanan secara paralel
-# def ambil_total_bulanan_paralel(tahun, kode_cabang):
-#     bulanan_totals = [0] * 12
-#     total_jml_sw = 0
-#     urls = []
-
-#     # Membuat daftar URL untuk setiap bulan
-#     for bulan in range(1, 13):
-#         start_date = f"01-{bulan:02d}-{tahun}"
-#         end_day = monthrange(tahun, bulan)[1]
-#         end_date = f"{end_day}-{bulan:02d}-{tahun}"
-#         url = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date}_{end_date}_{kode_cabang}?_=1733116412480'
-#         urls.append(url)
-
-#     # Menggunakan ThreadPoolExecutor untuk menangani permintaan secara paralel
-#     with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
-#         future_to_month = {executor.submit(ambil_data, url): idx for idx, url in enumerate(urls)}
-
-#         for future in as_completed(future_to_month):
-#             month_idx = future_to_month[future]
-#             try:
-#                 data = future.result()
-#                 if data and 'data' in data:
-#                     for item in data['data']:
-#                         try:
-#                             jml_sw = float(item.get('jml_sw', 0))
-#                             bulanan_totals[month_idx] += jml_sw
-#                             total_jml_sw += jml_sw
-#                         except ValueError:
-#                             continue
-#             except Exception as e:
-#                 print(f"Error processing data for month {month_idx + 1}: {e}")
-    
-#     return bulanan_totals, total_jml_sw
-
-# @app.route('/', methods=['GET', 'POST'])
-# def index():
-#     bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023, '0400001_1')
-#     bulanan_2024, total_2024 = ambil_total_bulanan_paralel(2024, '0400001_1')
-#     bulanan_2023_purwokerto, total_2023_purwokerto = ambil_total_bulanan_paralel(2023, '0400300_2')
-#     bulanan_2024_purwokerto, total_2024_purwokerto = ambil_total_bulanan_paralel(2024, '0400300_2')
-
-#     return render_template(
-#         'index.html',
-#         bulanan_2023=bulanan_2023,
-#         total_2023=total_2023,
-#         bulanan_2024=bulanan_2024,
-#         total_2024=total_2024,
-#         bulanan_2023_purwokerto=bulanan_2023_purwokerto,
-#         total_2023_purwokerto=total_2023_purwokerto,
-#         bulanan_2024_purwokerto=bulanan_2024_purwokerto,
-#         total_2024_purwokerto=total_2024_purwokerto
-#     )
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
