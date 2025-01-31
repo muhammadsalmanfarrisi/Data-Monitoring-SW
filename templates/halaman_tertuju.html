@@ -11,49 +11,106 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            font-weight: 700;
+            text-align: center;
+        }
         .card {
-            border: none;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        .card-header {
-            background-color: #f8f9fa;
-            font-weight: bold;
-            text-align: center;
-        }
-        .card-body {
+            margin-bottom: 20px;
             padding: 20px;
-            font-size: 1.1rem;
         }
-        .rupiah-value {
+        .card h3 {
             font-size: 1.5rem;
-            color: #28a745;
-            font-weight: bold;
+            font-weight: 600;
         }
-        .growth-up {
-            color: #28a745;
+        .btn-primary {
+            background-color: #4a90e2;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
-        .growth-down {
-            color: #dc3545;
+        .btn-primary:hover {
+            background-color: #357abd;
         }
-        .table thead {
-            background-color: #f8f9fa;
-            font-weight: bold;
+        .table {
+            font-size: 0.9rem;
         }
-        .table th, .table td {
-            text-align: center;
-            vertical-align: middle;
+        .form-inline .form-group {
+            margin-right: 15px;
         }
-        .text-success {
-            color: #28a745 !important;
+        .chart-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            width: 100%;  /* Makes the container responsive */
+            height: 600px; /* Adjust the height as needed */
         }
-        .text-danger {
-            color: #dc3545 !important;
+        label {
+            font-weight: 600;
+            color: #555;
         }
-        .fa-arrow-up, .fa-arrow-down {
-            margin-right: 5px;
+        .percentage-change {
+            font-size: 1.2rem; /* Increased font size for better visibility */
+            font-weight: 600;
         }
+
+        .difference {
+            font-size: 1.5rem; /* Larger font size for the actual difference */
+            font-weight: 700;
+            margin-left: 0px;
+        }
+        .total-sw {
+        font-size: 2rem; /* Sesuaikan ukuran sesuai kebutuhan */
+        font-weight: bold;
+        color: #333;
+    }
+    /* Header Styling */
+    .header {
+        background-color: #343a40;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+        position: relative; /* Default behavior */
+    }
+
+    .header a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .header a:hover {
+        text-decoration: underline;
+    }
+
+    /* Optional Body Styling */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f7f9fc;
+        color: #333;
+        margin: 0; /* Ensure no margin around the body */
+        padding: 0;
+    }
     </style>
 </head>
 <body>
@@ -134,92 +191,149 @@
         },
         plugins: [ChartDataLabels] // Mengaktifkan Chart.js Data Labels
     });
-</script>
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Total Jml SW {{ previous_year }}</div>
-                <div class="card-body">
-                    <h4>{{ start_date_2023 }} s/d {{ end_date_2023 }}</h4>
-                    <p class="rupiah-value">{{ total_jml_sw_2023 }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Total Jml SW {{ current_year }}</div>
-                <div class="card-body">
-                    <h4>{{ start_date_2024 }} s/d {{ end_date_2024 }}</h4>
-                    <p class="rupiah-value">{{ total_jml_sw_2024 }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Growth</div>
-                <div class="card-body">
-                    {% set diff = total_jml_sw_2024 - total_jml_sw_2023 %}
-                    {% set percent_change = (diff / total_jml_sw_2023) * 100 %}
-                    <p class="rupiah-value">{{ diff }}</p>
-                    <h4 class="{{ 'growth-up' if diff > 0 else 'growth-down' }}">
-                        {% if diff > 0 %}
-                            <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                        {% elif diff < 0 %}
-                            <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                        {% else %}
-                            <i class="fa fa-arrow-right"></i> 0%
-                        {% endif %}
-                    </h4>
-                </div>
-            </div>
+</script><br><br><br><br>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <h3>Total Jml SW {{ previous_year }}:</h3>
+            <p><H4>{{ start_date_2023 }} s/d {{ end_date_2023 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2023 }}</span></p>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">Data Kantor {{ kantor_jr }}</div>
-                <div class="card-body">
-                    <table class="table table-bordered text-center">
-                        <thead>
-                            <tr>
-                                <th rowspan="2" class="align-middle">Kantor</th>
-                                <th rowspan="2" class="align-middle">SW {{ previous_year }}</th>
-                                <th rowspan="2" class="align-middle">SW {{ current_year }}</th>
-                                <th colspan="2">Growth</th>
-                            </tr>
-                            <tr>
-                                <th>Jumlah (Rp)</th>
-                                <th>Persentase (%)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in data_kantor %}
-                                <tr>
-                                    <td>{{ item.kantor_jr }}</td>
-                                    <td class="rupiah-value">{{ item.total_sw_2023 }}</td>
-                                    <td class="rupiah-value">{{ item.total_sw_2024 }}</td>
-                                    {% set diff = item.total_sw_2024 - item.total_sw_2023 %}
-                                    {% set percent_change = (diff / item.total_sw_2023) * 100 if item.total_sw_2023 != 0 else 0 %}
-                                    <td class="rupiah-value">{{ diff }}</td>
-                                    <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
-                                        {% if diff > 0 %}
-                                            <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                                        {% elif diff < 0 %}
-                                            <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                                        {% else %}
-                                            <i class="fa fa-arrow-right"></i> 0%
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="col-md-4">
+        <div class="card">
+            <h3>Total Jml SW {{ current_year }}:</h3>
+            <p><H4>{{ start_date_2024 }} s/d {{ end_date_2024 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2024 }}</span></p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <h3>Growth</h3>
+            <p><strong>
+                {% set diff = total_jml_sw_2024 - total_jml_sw_2023 %}
+                {% set percent_change = (diff / total_jml_sw_2023) * 100 %}
+            </strong> <span class="rupiah-value total-sw">{{ diff }}</span></p>
+            <h4><span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                    
+                {% if diff > 0 %}
+                    <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                {% elif diff < 0 %}
+                    <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                {% else %}
+                    <i class="fa fa-arrow-right"></i> 0%
+                {% endif %}
+            </span></h4>
         </div>
     </div>
 </div>
+<div class="row">
+    
+    <div class="col-12">
+        <div class="card">
+            
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="align-middle">Kantor</th>
+                        <th rowspan="2" class="align-middle">SW {{ previous_year }}</th>
+                        <th rowspan="2" class="align-middle">SW {{ current_year }}</th>
+                        <th colspan="2">Growth</th>
+                    </tr>
+                    <tr>
+                        <th>Jumlah (Rp)</th>
+                        <th>Persentase (%)</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in data_kantor %}
+                    <tr>
+                        <td><a href="{{ url_for('halaman_tertuju', kode_kantor_jr=item.kode_kantor_jr) }}?kantor_jr={{ item.kantor_jr }}" target="_blank">{{ item.kantor_jr }}</a></td>
+                        <td class="rupiah-value">{{ item.total_sw_2023 }}</td>
+                        <td class="rupiah-value">{{ item.total_sw_2024 }}</td>
+                        {% set diff = item.total_sw_2024 - item.total_sw_2023 %}
+                        {% set percent_change = (diff / item.total_sw_2023) * 100 if item.total_sw_2023 != 0 else 0 %}
+                        <td class="rupiah-value">{{ diff }}</td>
+                                <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                                    
+                                    {% if diff > 0 %}
+                                        <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                                    {% elif diff < 0 %}
+                                        <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                                    {% else %}
+                                        <i class="fa fa-arrow-right"></i> 0%
+                                    {% endif %}
+                                </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+
+            
+        </div>
+    </div>
+    
+</div>
+
+<script>
+    var ctx = document.getElementById('chartSW').getContext('2d');
+    var chartSW = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: '{{ previous_year }}',
+                    data: {{ bulanan_2023 }},
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: false
+                },
+                {
+                    label: '{{ current_year }}',
+                    data: {{ bulanan_2024 }},
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Jumlah SW'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Bulan'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: '#333',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
 <script>
     function formatRupiah(value) {
         return "Rp " + value.toLocaleString("id-ID");
@@ -230,6 +344,97 @@
         element.textContent = formatRupiah(parseFloat(element.textContent.replace(/[^0-9.-]+/g,"")));
     });
     
+</script>
+<script>
+    // Fungsi untuk mengatur sinkronisasi tanggal antar tahun
+    function syncDatesMutually(sourceId, targetId, yearOffset) {
+        const sourceInput = document.getElementById(sourceId);
+        const targetInput = document.getElementById(targetId);
+
+        function updateTarget() {
+            const sourceDate = new Date(sourceInput.value);
+            if (!isNaN(sourceDate)) {
+                const targetDate = new Date(sourceDate);
+                targetDate.setFullYear(sourceDate.getFullYear() + yearOffset);
+                targetInput.value = targetDate.toISOString().split('T')[0];
+            }
+        }
+
+        function updateSource() {
+            const targetDate = new Date(targetInput.value);
+            if (!isNaN(targetDate)) {
+                const sourceDate = new Date(targetDate);
+                sourceDate.setFullYear(targetDate.getFullYear() - yearOffset);
+                sourceInput.value = sourceDate.toISOString().split('T')[0];
+            }
+        }
+
+        sourceInput.addEventListener('change', updateTarget);
+        targetInput.addEventListener('change', updateSource);
+    }
+
+    // Sinkronisasi dua arah antara tahun 2023 dan 2024
+    syncDatesMutually('start_date_2023', 'start_date_2024', 1);
+    syncDatesMutually('end_date_2023', 'end_date_2024', 1);
+</script>
+<script>
+    var refreshInterval;
+
+    // Fungsi untuk memulai auto-refresh
+    function startAutoRefresh() {
+        refreshInterval = setInterval(function () {
+            // Simpan posisi scroll sebelum refresh
+            localStorage.setItem('scrollPosition', window.scrollY);
+            location.reload();
+        }, 60000); // Refresh setiap 1 detik
+        document.getElementById('startRefreshBtn').style.display = 'none';
+        document.getElementById('stopRefreshBtn').style.display = 'inline-block';
+
+        // Simpan status auto-refresh di localStorage
+        localStorage.setItem('autoRefresh', 'true');
+    }
+
+    // Fungsi untuk menghentikan auto-refresh
+    function stopAutoRefresh() {
+        clearInterval(refreshInterval);
+        document.getElementById('startRefreshBtn').style.display = 'inline-block';
+        document.getElementById('stopRefreshBtn').style.display = 'none';
+
+        // Hapus status auto-refresh dari localStorage
+        localStorage.removeItem('autoRefresh');
+    }
+
+    // Fungsi untuk memulihkan posisi scroll
+    function restoreScrollPosition() {
+        const savedPosition = localStorage.getItem('scrollPosition');
+        if (savedPosition !== null) {
+            window.scrollTo(0, parseInt(savedPosition, 10));
+        }
+        // Hapus posisi scroll setelah dipulihkan
+        localStorage.removeItem('scrollPosition');
+    }
+
+    // Event listener tombol Start Refresh
+    document.getElementById('startRefreshBtn').addEventListener('click', startAutoRefresh);
+
+    // Event listener tombol Stop Refresh
+    document.getElementById('stopRefreshBtn').addEventListener('click', stopAutoRefresh);
+
+    // Cek status auto-refresh dan posisi scroll saat halaman dimuat
+    window.onload = function () {
+        restoreScrollPosition(); // Pulihkan posisi scroll
+
+        if (localStorage.getItem('autoRefresh') === 'true') {
+            startAutoRefresh(); // Mulai auto-refresh jika status tersimpan di localStorage
+        }
+
+        // Tangani form resubmission (jika diperlukan)
+        if (window.performance && window.performance.navigation.type === 2) {
+            setTimeout(function () {
+                document.querySelector('button[type="submit"]').click(); // Submit form otomatis
+            }, 500); // Sesuaikan delay jika diperlukan
+        }
+    };
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

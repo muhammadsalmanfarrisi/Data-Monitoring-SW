@@ -4,9 +4,12 @@ from calendar import monthrange
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 import time
+from flask import session
+import os
 
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 MAX_THREADS = 5
 current_year = datetime.now().year
@@ -173,10 +176,15 @@ def index():
 
         if form_type == 'form1':
             # Mendapatkan tanggal mulai dan akhir untuk dua rentang (2023 dan 2024)
-            start_date_2023 = request.form['start_date_2023']
-            end_date_2023 = request.form['end_date_2023']
-            start_date_2024 = request.form['start_date_2024']
-            end_date_2024 = request.form['end_date_2024']
+            session['start_date_2023'] = request.form['start_date_2023']
+            session['end_date_2023'] = request.form['end_date_2023']
+            session['start_date_2024'] = request.form['start_date_2024']
+            session['end_date_2024'] = request.form['end_date_2024']
+
+            start_date_2023 = session.get('start_date_2023', '2023-01-01')
+            end_date_2023 = session.get('end_date_2023', '2023-12-31')
+            start_date_2024 = session.get('start_date_2024', '2024-01-01')
+            end_date_2024 = session.get('end_date_2024', '2024-12-31')
 
             # URL API untuk data 2023 dan 2024
             url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_0400001_1?_=1731895548035'
@@ -203,10 +211,12 @@ def index():
 def halaman_tertuju(kode_kantor_jr):
     kantor_jr_query = request.args.get('kantor_jr', kode_kantor_jr)
     # Mendapatkan tanggal mulai dan akhir untuk dua rentang (2023 dan 2024)
-    start_date_2023 = request.form.get('start_date_2023', '2023-01-01')
-    end_date_2023 = request.form.get('end_date_2023', '2023-12-31')
-    start_date_2024 = request.form.get('start_date_2024', '2024-01-01')
-    end_date_2024 = request.form.get('end_date_2024', '2024-12-31')
+    # Ambil tanggal dari session
+    start_date_2023 = session.get('start_date_2023', '2023-01-01')
+    end_date_2023 = session.get('end_date_2023', '2023-12-31')
+    start_date_2024 = session.get('start_date_2024', '2024-01-01')
+    end_date_2024 = session.get('end_date_2024', '2024-12-31')
+
 
     # URL API untuk data 2023 dan 2024 dengan kode_kantor_jr
     url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_{kode_kantor_jr}_2?_=1731895548035'
