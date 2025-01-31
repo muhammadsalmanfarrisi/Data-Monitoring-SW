@@ -62,7 +62,7 @@
     <h1 class="text-center mb-4">Dashboard Monitoring SW {{ kantor_jr }}</h1>
     <!-- Diagram Batang untuk Total Jml SW 2023 dan 2024 -->
 <div class="chart-container mt-5 text-center">
-    <h3 class="text-center">Perbandingan Total Jml SW 2023 dan 2024</h3><br>
+    <h3 class="text-center">Perbandingan Total Jml SW {{ previous_year }} dan {{ current_year }}</h3><br>
     <canvas id="barChartSW" width="400" height="200"></canvas>
 </div>
 
@@ -76,7 +76,7 @@
     var barChartSW = new Chart(barCtx, {
         type: 'bar',
         data: {
-            labels: ['2023', '2024'],
+            labels: ['{{ previous_year }}', '{{ current_year }}'],
             datasets: [{
                 label: 'Total Jml SW',
                 data: [total_jml_sw_2023, total_jml_sw_2024],
@@ -138,7 +138,7 @@
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header">Total Jml SW 2023</div>
+                <div class="card-header">Total Jml SW {{ previous_year }}</div>
                 <div class="card-body">
                     <h4>{{ start_date_2023 }} s/d {{ end_date_2023 }}</h4>
                     <p class="rupiah-value">{{ total_jml_sw_2023 }}</p>
@@ -147,7 +147,7 @@
         </div>
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header">Total Jml SW 2024</div>
+                <div class="card-header">Total Jml SW {{ current_year }}</div>
                 <div class="card-body">
                     <h4>{{ start_date_2024 }} s/d {{ end_date_2024 }}</h4>
                     <p class="rupiah-value">{{ total_jml_sw_2024 }}</p>
@@ -184,8 +184,8 @@
                         <thead>
                             <tr>
                                 <th rowspan="2" class="align-middle">Kantor</th>
-                                <th rowspan="2" class="align-middle">SW 2023</th>
-                                <th rowspan="2" class="align-middle">SW 2024</th>
+                                <th rowspan="2" class="align-middle">SW {{ previous_year }}</th>
+                                <th rowspan="2" class="align-middle">SW {{ current_year }}</th>
                                 <th colspan="2">Growth</th>
                             </tr>
                             <tr>

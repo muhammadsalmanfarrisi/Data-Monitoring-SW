@@ -126,13 +126,13 @@
         <div class="row mt-4">
             <div class="col-md-6">
                 <div class="card">
-                    <h3>Total SW 2023</h3>
+                    <h3>Total SW {{ previous_year }}</h3>
                     <p class="display-4 rupiah-value">{{ total_2023 }}</p>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card">
-                    <h3>Total SW 2024</h3>
+                    <h3>Total SW {{ current_year }}</h3>
                     <p class="display-4 rupiah-value">{{ total_2024 }}</p>
                     <p class="percentage-change">
                         {% set diff = total_2024 - total_2023 %}
@@ -161,37 +161,40 @@
         <div class="chart-container mt-5">
             <canvas id="chartSW" width="400" height="200"></canvas>
         </div><br>
-        <h1>Perwakilan Purwokerto</h1>
+        <h1>Perbandingan Data Pendapatan SW {{ previous_year }} dan {{ current_year }}</h1>
 
         <!-- Date Selection Form -->
         <form method="POST" class="mt-5">
             <div class="row">
                 <div class="col-md-6">
-                    <label for="start_date_2023">Start Date (2023)</label>
+                    <label for="start_date_2023">Start Date {{ previous_year }}</label>
                     <!-- Menambahkan teks petunjuk sebelum input -->
-                    <small class="form-text text-muted">Masukkan tanggal mulai pada tahun 2023</small>
-                    <input type="date" class="form-control" id="start_date_2023" name="start_date_2023" value="{{ start_date_2023 | default('2023-01-01') }}">
+                    <small class="form-text text-muted">Masukkan tanggal mulai pada tahun {{ previous_year }}</small>
+                    <input type="date" class="form-control" id="start_date_2023" name="start_date_2023" value="{{ start_date_2023 | default(previous_year ~ '-01-01') }}">
+
                 </div>
                 <div class="col-md-6">
-                    <label for="end_date_2023">End Date (2023)</label>
+                    <label for="end_date_2023">End Date {{ previous_year }}</label>
                     <!-- Menambahkan teks petunjuk sebelum input -->
                     <small class="form-text text-muted">Masukkan tanggal selesai pada tahun 2023</small>
-                    <input type="date" class="form-control" id="end_date_2023" name="end_date_2023" value="{{ end_date_2023 | default('2023-12-31') }}">
+                    <input type="date" class="form-control" id="end_date_2023" name="end_date_2023" value="{{ end_date_2023 | default(previous_year ~ '-12-31') }}">
+
                 </div>
             </div>
                       
             <div class="row mt-3">
                 <div class="col-md-6">
-                    <label for="start_date_2024">Start Date (2024)</label>
-                    <small class="form-text text-muted">Masukkan tanggal mulai pada tahun 2024</small>
+                    <label for="start_date_2024">Start Date {{ current_year }}</label>
+                    <small class="form-text text-muted">Masukkan tanggal mulai pada tahun {{ current_year }}</small>
 
-                    <input type="date" class="form-control" id="start_date_2024" name="start_date_2024" value="{{ start_date_2024 | default('2024-01-01') }}">
+                    <input type="date" class="form-control" id="start_date_2024" name="start_date_2024" value="{{ start_date_2024 | default(current_year ~ '-01-01') }}">
+
                 </div>
                 <div class="col-md-6">
-                    <label for="end_date_2024">End Date (2024)</label>
-                    <small class="form-text text-muted">Masukkan tanggal mulai pada tahun 2024</small>
+                    <label for="end_date_2024">End Date {{ current_year }}</label>
+                    <small class="form-text text-muted">Masukkan tanggal selesai pada tahun {{ current_year }}</small>
 
-                    <input type="date" class="form-control" id="end_date_2024" name="end_date_2024" value="{{ end_date_2024 | default('2024-12-31') }}">
+                    <input type="date" class="form-control" id="end_date_2024" name="end_date_2024" value="{{ end_date_2024 | default(current_year ~ '-12-31') }}">
                 </div>
             </div>
             
@@ -199,7 +202,7 @@
         </form>
 <!-- Diagram Batang untuk Total Jml SW 2023 dan 2024 -->
 <div class="chart-container mt-5 text-center">
-    <h3 class="text-center">Perbandingan Total Jml SW 2023 dan 2024</h3><br>
+    <h3 class="text-center">Perbandingan Total Jml SW {{ previous_year }} dan {{ current_year }}</h3><br>
     <canvas id="barChartSW" width="400" height="200"></canvas>
 </div>
 
@@ -213,7 +216,7 @@
     var barChartSW = new Chart(barCtx, {
         type: 'bar',
         data: {
-            labels: ['2023', '2024'],
+            labels: ['{{ previous_year }}', '{{ current_year }}'],
             datasets: [{
                 label: 'Total Jml SW',
                 data: [total_jml_sw_2023, total_jml_sw_2024],
@@ -277,13 +280,13 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card">
-                    <h3>Total Jml SW 2023:</h3>
+                    <h3>Total Jml SW {{ previous_year }}:</h3>
                     <p><H4>{{ start_date_2023 }} s/d {{ end_date_2023 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2023 }}</span></p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
-                    <h3>Total Jml SW 2024:</h3>
+                    <h3>Total Jml SW {{ current_year }}:</h3>
                     <p><H4>{{ start_date_2024 }} s/d {{ end_date_2024 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2024 }}</span></p>
                 </div>
             </div>
@@ -316,8 +319,8 @@
                         <thead>
                             <tr>
                                 <th rowspan="2" class="align-middle">Kantor</th>
-                                <th rowspan="2" class="align-middle">SW 2023</th>
-                                <th rowspan="2" class="align-middle">SW 2024</th>
+                                <th rowspan="2" class="align-middle">SW {{ previous_year }}</th>
+                                <th rowspan="2" class="align-middle">SW {{ current_year }}</th>
                                 <th colspan="2">Growth</th>
                             </tr>
                             <tr>
@@ -371,7 +374,7 @@
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     datasets: [
                         {
-                            label: '2023',
+                            label: '{{ previous_year }}',
                             data: {{ bulanan_2023 }},
                             borderColor: 'rgba(75, 192, 192, 1)',
                             borderWidth: 2,
@@ -380,7 +383,7 @@
                             fill: false
                         },
                         {
-                            label: '2024',
+                            label: '{{ current_year }}',
                             data: {{ bulanan_2024 }},
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 2,

@@ -9,7 +9,8 @@ import time
 app = Flask(__name__)
 
 MAX_THREADS = 5
-
+current_year = datetime.now().year
+previous_year = current_year - 1
 # Fungsi untuk mengambil data dari URL dengan cookies
 def ambil_data(url, retries=3, timeout=10):
     # Membuat session untuk mengelola cookies
@@ -159,9 +160,10 @@ def gabungkan_data_per_kantor(data_2023, data_2024):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    
     # Ambil total bulanan dan tahunan
-    bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023)
-    bulanan_2024, total_2024 = ambil_total_bulanan_paralel(2024)
+    bulanan_2023, total_2023 = ambil_total_bulanan_paralel(previous_year)
+    bulanan_2024, total_2024 = ambil_total_bulanan_paralel(current_year)
 
     # Inisialisasi data kantor
     data_kantor = []
@@ -190,11 +192,11 @@ def index():
             return render_template('index.html', data_2023=data_2023, data_2024=data_2024,data_kantor=data_kantor, total_jml_sw_2023=total_jml_sw_2023,
                                    total_jml_sw_2024=total_jml_sw_2024, start_date_2023=start_date_2023,
                                    end_date_2023=end_date_2023, start_date_2024=start_date_2024, 
-                                   end_date_2024=end_date_2024, bulanan_2023=bulanan_2023, total_2023=total_2023,
+                                   end_date_2024=end_date_2024, bulanan_2023=bulanan_2023, total_2023=total_2023, current_year=current_year, previous_year=previous_year,
                                    bulanan_2024=bulanan_2024, total_2024=total_2024)
 
     return render_template('index.html', data_kantor=data_kantor, data_2023=None, data_2024=None, 
-                           bulanan_2023=bulanan_2023, total_2023=total_2023, bulanan_2024=bulanan_2024, total_2024=total_2024)
+                           bulanan_2023=bulanan_2023, total_2023=total_2023, bulanan_2024=bulanan_2024, current_year=current_year, previous_year=previous_year, total_2024=total_2024)
 
 
 @app.route('/halaman_tertuju/<kode_kantor_jr>', methods=['GET', 'POST'])
@@ -229,7 +231,7 @@ def halaman_tertuju(kode_kantor_jr):
                            end_date_2023=end_date_2023,
                            start_date_2024=start_date_2024,
                            end_date_2024=end_date_2024,
-                           diff=diff,
+                           diff=diff, current_year=current_year, previous_year=previous_year,
                            percent_change=percent_change, kantor_jr=kantor_jr_query)
 
 
