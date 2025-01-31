@@ -315,7 +315,7 @@
                     <table class="table table-bordered text-center">
                         <thead>
                             <tr>
-                                <th rowspan="2" class="align-middle">Loket Samsat</th>
+                                <th rowspan="2" class="align-middle">Kantor</th>
                                 <th rowspan="2" class="align-middle">SW 2023</th>
                                 <th rowspan="2" class="align-middle">SW 2024</th>
                                 <th colspan="2">Growth</th>
@@ -327,32 +327,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for item in data_kantor %}
                             <tr>
-                                <td>SAMSAT PURWOKERTO</td>
-                                <td class="rupiah-value">{{ total_purwokerto_2023 }}</td>
-                                <td class="rupiah-value">{{ total_purwokerto }}</td>
-                                {% set diff = total_purwokerto - total_purwokerto_2023 %}
-                                {% set percent_change = (diff / total_purwokerto_2023) * 100 %}
-                                <td class="rupiah-value">{{ diff }}</td>
-                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
-                                            
-                                            {% if diff > 0 %}
-                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                                            {% elif diff < 0 %}
-                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                                            {% else %}
-                                                <i class="fa fa-arrow-right"></i> 0%
-                                            {% endif %}
-                                        </td>
-                            
-                                
-                            </tr>
-                            <tr>
-                                <td>SAMSAT PURBALINGGA</td>
-                                <td class="rupiah-value">{{ total_purbalingga_2023 }}</td>
-                                <td class="rupiah-value">{{ total_purbalingga }}</td>
-                                {% set diff = total_purbalingga - total_purbalingga_2023 %}
-                                {% set percent_change = (diff / total_purbalingga_2023) * 100 %}
+                                <td>{{ item.kantor_jr }}</td>
+                                <td class="rupiah-value">{{ item.total_sw_2023 }}</td>
+                                <td class="rupiah-value">{{ item.total_sw_2024 }}</td>
+                                {% set diff = item.total_sw_2024 - item.total_sw_2023 %}
+                                {% set percent_change = (diff / item.total_sw_2023) * 100 %}
                                 <td class="rupiah-value">{{ diff }}</td>
                                         <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
                                             
@@ -365,79 +346,7 @@
                                             {% endif %}
                                         </td>
                             </tr>
-                            <tr>
-                                <td>SAMSAT BANJARNEGARA</td>
-                                <td class="rupiah-value">{{ total_banjarnegara_2023 }}</td>
-                                <td class="rupiah-value">{{ total_banjarnegara }}</td>
-                                {% set diff = total_banjarnegara - total_banjarnegara_2023 %}
-                                {% set percent_change = (diff / total_banjarnegara_2023) * 100 %}
-                                <td class="rupiah-value">{{ diff }}</td>
-                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
-                                            
-                                            {% if diff > 0 %}
-                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                                            {% elif diff < 0 %}
-                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                                            {% else %}
-                                                <i class="fa fa-arrow-right"></i> 0%
-                                            {% endif %}
-                                        </td>
-                            </tr>
-                            <tr>
-                                <td>SAMSAT MAJENANG</td>
-                                <td class="rupiah-value">{{ total_majenang_2023 }}</td>
-                                <td class="rupiah-value">{{ total_majenang }}</td>
-                                {% set diff = total_majenang - total_majenang_2023 %}
-                                {% set percent_change = (diff / total_majenang_2023) * 100 %}
-                                <td class="rupiah-value">{{ diff }}</td>
-                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
-                                            
-                                            {% if diff > 0 %}
-                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                                            {% elif diff < 0 %}
-                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                                            {% else %}
-                                                <i class="fa fa-arrow-right"></i> 0%
-                                            {% endif %}
-                                        </td>
-                            </tr>
-                            <tr>
-                                <td>SAMSAT CILACAP</td>
-                                <td class="rupiah-value">{{ total_cilacap_2023 }}</td>
-                                <td class="rupiah-value">{{ total_cilacap }}</td>
-                                {% set diff = total_cilacap - total_cilacap_2023 %}
-                                {% set percent_change = (diff / total_cilacap_2023) * 100 %}
-                                <td class="rupiah-value">{{ diff }}</td>
-                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
-                                            
-                                            {% if diff > 0 %}
-                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                                            {% elif diff < 0 %}
-                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                                            {% else %}
-                                                <i class="fa fa-arrow-right"></i> 0%
-                                            {% endif %}
-                                        </td>
-                            </tr>
-                            <tr>
-                                <td>SAMSAT WANGON</td>
-                                <td class="rupiah-value">{{ total_wangon }}</td>
-                                <td class="rupiah-value">{{ total_wangon }}</td>
-                                {% set diff = total_wangon - total_wangon_2023 %}
-                                {% set percent_change = (diff / total_wangon_2023) * 100 %}
-                                <td class="rupiah-value">{{ diff }}</td>
-                                        <td class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
-                                            
-                                            {% if diff > 0 %}
-                                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                                            {% elif diff < 0 %}
-                                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                                            {% else %}
-                                                <i class="fa fa-arrow-right"></i> 0%
-                                            {% endif %}
-                                        </td>
-                            </tr>
-                            
+                            {% endfor %}
                         </tbody>
                     </table>
                     
@@ -452,42 +361,7 @@
 <br><br><br><br>
         <h1>Dashboard Monitoring SW Perwakilan Purwokerto</h1>
         
-        <!-- Total Data Section -->
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <h3>Total SW 2023</h3>
-                    <p class="display-4 rupiah-value">{{ total_2023_purwokerto }}</p>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <h3>Total SW 2024</h3>
-                    <p class="display-4 rupiah-value">{{ total_2024_purwokerto }}</p>
-                    <p class="percentage-change">
-                        {% set diff = total_2024_purwokerto - total_2023_purwokerto %}
-                        {% set percent_change = (diff / total_2023_purwokerto) * 100 %}
-                        <i class="rupiah-value">{{ diff }}</i> <br>
-                        <span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
-                            
-                            {% if diff > 0 %}
-                                <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                            {% elif diff < 0 %}
-                                <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                            {% else %}
-                                <i class="fa fa-arrow-right"></i> 0%
-                            {% endif %}
-                        </span>
-                    </p>
-                    
-                </div>
-            </div>
-        </div>
-
-        <!-- Chart Section -->
-        <div class="chart-container mt-5">
-            <canvas id="chartSW_purwokerto" width="400" height="200"></canvas>
-        </div>
+        
      
 
 
@@ -550,7 +424,8 @@
                 }
             });
         </script>
-        <script>
+        
+        <!-- <script>
             var ctx = document.getElementById('chartSW_purwokerto').getContext('2d');
             var chartSW = new Chart(ctx, {
                 type: 'line',
@@ -608,7 +483,7 @@
                     }
                 }
             });
-        </script>
+        </script> -->
         <script>
             function formatRupiah(value) {
                 return "Rp " + value.toLocaleString("id-ID");

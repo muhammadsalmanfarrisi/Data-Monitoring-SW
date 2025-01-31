@@ -17,13 +17,13 @@ def ambil_data(url, retries=3, timeout=10):
 
     # Menambahkan cookies yang Anda salin dari browser (Ganti dengan cookies yang relevan)
     cookies = {
-        'XSRF-TOKEN': 'eyJpdiI6Ii83b0NYcnpmK2V5TG1VSmdMeDhYcXc9PSIsInZhbHVlIjoiRTMra05ucmVCQXRYZE54QUtsVFEzbS9Fb1Q4Z2NyN0VlbmRnc1MxOFFZbFI3aEhCOHV2RDQ5ZHhVRkxpbGMwT0hnRjJqL3M3S2RRZjV2M080aXJTRWQrUHR6TGFVc0VTNVh2VG5LaUVxSWRwOU14VFdzaENpZlJMK2lKeU12Um8iLCJtYWMiOiIwNTRkMWQ1ZDJhMTFjM2ExMzk0M2VjNTk4YjBkMDQ3MmM5NTFiMzBjOTU3OTc3YzM2NGNkOWRjYTdlOGVlNWViIiwidGFnIjoiIn0%3D',
+        'XSRF-TOKEN': 'eyJpdiI6IlRFVVRiUUwyR0JBRk1tdEdDWVRxZ3c9PSIsInZhbHVlIjoiNGdUNG5oR0ZpcnBjeC9ka2JoMjNVb2dvSGxRVjRxQkxvL0k5M0VhclNOcE91eTZScHk2MUNQcytOckdITWxSMkJFK2F2SGNrY2dHZk9SdjdwV3hiWmUwOW5PaXdpditYbXU0bU12WStpZlF3WUxYMTdNc1daaVc2L2lwOG8yZE0iLCJtYWMiOiI2NzljYTM2NTFkOTQ0ZDI4N2EyMTdiZWE2ZWMxZDBlNGMzZGYzNjI1MTA1ZGNlZjIzYjdhOWQ2OTAwZTVmZGI3IiwidGFnIjoiIn0%3D',
         '_ga': 'GA1.1.140722331.1727057868',
         '_ga_JQ088T32QP': 'GS1.1.1727061610.2.1.1727061629.0.0.0', 
         '_ga_VNWN27RPNX': 'GS1.3.1727061611.2.0.1727061611.60.0.0', 
-        'ceri_session': 'eyJpdiI6ImRkejMxcDFqNTc5cXYvcUMyV2N6TUE9PSIsInZhbHVlIjoiZGZVeFFVREdNaGpXZ3dsWjZiMDJMZlBoZ0RvTFFaYVhOQkxyTDJtWWV6Y3ZFcDRFQ3ZGb1RmN0hMb3lubXlPbTlobFhKaU45clJad2JRb0VWQWlMZkkySmZRL1JDZ1N1Y3M5WjYxWUNaMW9YMkEzQ1h3dmRkdkhHc0dSa0YvWjEiLCJtYWMiOiJlN2ZkMTkxYjE1MTQ1OThkYjFlZGI0MjY4ZmYzYjFlMDE1NmVmNjk3MzZkMGE3ZmEzODUwMmU5Zjk2Y2M2ZDEzIiwidGFnIjoiIn0%3D',
+        'ceri_session': 'eyJpdiI6ImRTT2s5bWlGdzVNWmhMVkFnUVU0VlE9PSIsInZhbHVlIjoiSTFCa0NOcTZVN2RjVXRFSnNhc2ZoV3hWTzZxZW1JTFRpS21sUnJ6UldLaitLV1NjR0VkOWE1SENEbEkyTlg5TVUrSDV3TldNclBFbDJ2VEtpblZTZyt3S3M1eEt6bzJ1eG9raWJtVVlKclIyRCs0WFN2VklLU1JmbURISkt6Z1ciLCJtYWMiOiI0M2ZlMDhjNGJiOGUzOWM5MzU5YzJhOTFhOTAyYTc5MmY2MDU3YTEzMjQ4ZjU1N2U1MjVjZjU0OGFmNDhjZjYxIiwidGFnIjoiIn0%3D',
         'cookiesession1': '678B28C4BA1B09254D21278D87A606A5',
-        'jr_cookie': '98122d81101bed08eedde6ce83fc9667',
+        'jr_cookie': 'c686aabd2eea2ae0eedde6ce6a909c67',
         'remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d': 'eyJpdiI6Ii9wYUR3Qm9aNFh0WEhOUjQ5K2FYbXc9PSIsInZhbHVlIjoiRXVTWkZQNThZTWFoZ0ZBQU41SE1obFVQK0pncW0rQ3EwRHdQbkp0MGE1QmtWZXBxSnAveWNsQ2h3ZzNjWVZXV0pHVUlJNGs3dm1oZTlNSHVGVGRCU0VOK1E3QUVaaS9yNHpPR09abGx3VmZoSVF6dWFJbk51NEZ3eXdHODNwcjRVbXZ1cFRCL0xKdkFYaUxiTTdTSWVRPT0iLCJtYWMiOiJkN2NkMzQ5Mjc3NTVhYmRiNzU4NzBiNmU4MjE2NWQ5NzgwNDE5NWNjYWI2YTFkZTY1MDQxMjAxYjZlMGFkYmEwIiwidGFnIjoiIn0%3D'
     }
 
@@ -58,7 +58,8 @@ def ambil_data(url, retries=3, timeout=10):
                     # Tambahkan item ke dalam list result
                     result.append({
                         'kantor_jr': item['kantor_jr'],
-                        'jml_sw': jml_sw
+                        'jml_sw': jml_sw,
+                        'kode_kantor_jr': item['kode_kantor_jr']  # Menambahkan kode_kantor_jr
                     })
                     
                     # Tambahkan nilai jml_sw ke total_jml_sw
@@ -123,6 +124,78 @@ def ambil_total_bulanan_paralel_purwokerto(tahun):
         
         return bulanan_totals_purwokerto, total_jml_sw_all_years_purwokerto
 
+def gabungkan_data_per_kantor(data_2023, data_2024):
+    # Dictionary untuk menyimpan data per kantor
+    data_kantor = {}
+
+    # Proses data 2023
+    for item in data_2023:
+        kode_kantor = item['kode_kantor_jr']
+        if kode_kantor not in data_kantor:
+            data_kantor[kode_kantor] = {
+                'kode_kantor_jr': kode_kantor,
+                'kantor_jr': item['kantor_jr'],
+                'total_sw_2023': item['jml_sw'],
+                'total_sw_2024': 0  # Inisialisasi untuk 2024
+            }
+        else:
+            data_kantor[kode_kantor]['total_sw_2023'] += item['jml_sw']
+
+    # Proses data 2024
+    for item in data_2024:
+        kode_kantor = item['kode_kantor_jr']
+        if kode_kantor not in data_kantor:
+            data_kantor[kode_kantor] = {
+                'kode_kantor_jr': kode_kantor,
+                'kantor_jr': item['kantor_jr'],
+                'total_sw_2023': 0,  # Inisialisasi untuk 2023
+                'total_sw_2024': item['jml_sw']
+            }
+        else:
+            data_kantor[kode_kantor]['total_sw_2024'] += item['jml_sw']
+
+    # Ubah dictionary ke list untuk digunakan di template
+    return list(data_kantor.values())
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    # Ambil total bulanan dan tahunan
+    bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023)
+    bulanan_2024, total_2024 = ambil_total_bulanan_paralel(2024)
+
+    # Inisialisasi data kantor
+    data_kantor = []
+
+    if request.method == 'POST':
+        form_type = request.form.get('form_type')
+
+        if form_type == 'form1':
+            # Mendapatkan tanggal mulai dan akhir untuk dua rentang (2023 dan 2024)
+            start_date_2023 = request.form['start_date_2023']
+            end_date_2023 = request.form['end_date_2023']
+            start_date_2024 = request.form['start_date_2024']
+            end_date_2024 = request.form['end_date_2024']
+
+            # URL API untuk data 2023 dan 2024
+            url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_0400001_1?_=1731895548035'
+            url_2024 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2024}_{end_date_2024}_0400001_1?_=1731895548035'
+
+            # Ambil data API
+            data_2023, total_jml_sw_2023 = ambil_data(url_2023)
+            data_2024, total_jml_sw_2024 = ambil_data(url_2024)
+
+            # Gabungkan data per kantor
+            data_kantor = gabungkan_data_per_kantor(data_2023, data_2024)
+
+            return render_template('index.html', data_kantor=data_kantor, total_jml_sw_2023=total_jml_sw_2023,
+                                   total_jml_sw_2024=total_jml_sw_2024, start_date_2023=start_date_2023,
+                                   end_date_2023=end_date_2023, start_date_2024=start_date_2024, 
+                                   end_date_2024=end_date_2024, bulanan_2023=bulanan_2023, total_2023=total_2023,
+                                   bulanan_2024=bulanan_2024, total_2024=total_2024)
+
+    return render_template('index.html', data_kantor=data_kantor, data_2023=None, data_2024=None, 
+                           bulanan_2023=bulanan_2023, total_2023=total_2023, bulanan_2024=bulanan_2024, total_2024=total_2024)
+
 # @app.route('/', methods=['GET', 'POST'])
 # def index():
 #     bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023)
@@ -154,104 +227,104 @@ def ambil_total_bulanan_paralel_purwokerto(tahun):
         
 #     return render_template('index.html', data_2023=None, data_2024=None, bulanan_2023=bulanan_2023, total_2023=total_2023,
 #                            bulanan_2024=bulanan_2024, total_2024=total_2024)
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023)
-    bulanan_2024, total_2024 = ambil_total_bulanan_paralel(2024)  # Bulan Januari - Desember 2024
-    bulanan_2023_purwokerto, total_2023_purwokerto = ambil_total_bulanan_paralel_purwokerto(2023)
-    bulanan_2024_purwokerto, total_2024_purwokerto = ambil_total_bulanan_paralel_purwokerto(2024)  # Bulan Januari - Desember 2024
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     bulanan_2023, total_2023 = ambil_total_bulanan_paralel(2023)
+#     bulanan_2024, total_2024 = ambil_total_bulanan_paralel(2024)  # Bulan Januari - Desember 2024
+#     bulanan_2023_purwokerto, total_2023_purwokerto = ambil_total_bulanan_paralel_purwokerto(2023)
+#     bulanan_2024_purwokerto, total_2024_purwokerto = ambil_total_bulanan_paralel_purwokerto(2024)  # Bulan Januari - Desember 2024
 
-    # Initialize totals for each SAMSAT branch
-    total_purwokerto = 0
-    total_purbalingga = 0
-    total_banjarnegara = 0
-    total_majenang = 0
-    total_cilacap = 0
-    total_wangon = 0
-    total_purwokerto_2023 = 0
-    total_purbalingga_2023 = 0
-    total_banjarnegara_2023 = 0
-    total_majenang_2023 = 0
-    total_cilacap_2023 = 0
-    total_wangon_2023 = 0
-    # Loop through the data_2024 and calculate totals for each SAMSAT branch
+#     # Initialize totals for each SAMSAT branch
+#     total_purwokerto = 0
+#     total_purbalingga = 0
+#     total_banjarnegara = 0
+#     total_majenang = 0
+#     total_cilacap = 0
+#     total_wangon = 0
+#     total_purwokerto_2023 = 0
+#     total_purbalingga_2023 = 0
+#     total_banjarnegara_2023 = 0
+#     total_majenang_2023 = 0
+#     total_cilacap_2023 = 0
+#     total_wangon_2023 = 0
+#     # Loop through the data_2024 and calculate totals for each SAMSAT branch
     
 
-    if request.method == 'POST':
-        form_type = request.form.get('form_type')
-        if form_type == 'form1':
-            # Mendapatkan tanggal mulai dan tanggal akhir untuk dua rentang (2023 dan 2024)
-            start_date_2023 = request.form['start_date_2023']
-            end_date_2023 = request.form['end_date_2023']
-            start_date_2024 = request.form['start_date_2024']
-            end_date_2024 = request.form['end_date_2024']
+#     if request.method == 'POST':
+#         form_type = request.form.get('form_type')
+#         if form_type == 'form1':
+#             # Mendapatkan tanggal mulai dan tanggal akhir untuk dua rentang (2023 dan 2024)
+#             start_date_2023 = request.form['start_date_2023']
+#             end_date_2023 = request.form['end_date_2023']
+#             start_date_2024 = request.form['start_date_2024']
+#             end_date_2024 = request.form['end_date_2024']
             
-            url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_0400300_2?_=1731895548035'
-            url_2024 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2024}_{end_date_2024}_0400300_2?_=1731895548035'
+#             url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_0400300_2?_=1731895548035'
+#             url_2024 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2024}_{end_date_2024}_0400300_2?_=1731895548035'
             
-            data_2023, total_jml_sw_2023 = ambil_data(url_2023)
-            data_2024, total_jml_sw_2024 = ambil_data(url_2024)
-            if data_2024:
-                    for item in data_2024:
-                        if item['kantor_jr'] in ['SAMSAT PURWOKERTO', 'SAMSAT PURWOKERTO II', 'SAMSAT CEPAT PURWOKERTO', 
-                                                'SAMSAT PURWOKERTO III', 'SAMSAT PATEN SOKARAJA', 'SAMSAT RITA MALL PURWOKERTO', 
-                                                'SAMSAT RITA MALL PURWOKERTO MALAM']:
-                            total_purwokerto += item['jml_sw']
-                        elif item['kantor_jr'] in ['SAMSAT PURBALINGGA', 'SAMSAT PURBALINGGA II', 'SAMSAT PATEN BUKATEJA', 
-                                                'SAMSAT MALAM PURBALINGGA']:
-                            total_purbalingga += item['jml_sw']
-                        elif item['kantor_jr'] in ['SAMSAT BANJARNEGARA', 'SAMSAT KELILING BANJARNEGARA', 
-                                                'SAMSAT KELILING BANJARNEGARA II', 'SAMSAT GERAI SWALAYAN PELITA']:
-                            total_banjarnegara += item['jml_sw']
-                        elif item['kantor_jr'] == 'SAMSAT MAJENANG':
-                            total_majenang += item['jml_sw']
-                        elif item['kantor_jr'] in ['SAMSAT CILACAP', 'SAMSAT CILACAP II', 'SAMSAT KELILING CILACAP MALAM']:
-                            total_cilacap += item['jml_sw']
-                        elif item['kantor_jr'] in ['SAMSAT WANGON', 'SAMSAT KELILING WANGON']:
-                            total_wangon += item['jml_sw']
+#             data_2023, total_jml_sw_2023 = ambil_data(url_2023)
+#             data_2024, total_jml_sw_2024 = ambil_data(url_2024)
+#             if data_2024:
+#                     for item in data_2024:
+#                         if item['kantor_jr'] in ['SAMSAT PURWOKERTO', 'SAMSAT PURWOKERTO II', 'SAMSAT CEPAT PURWOKERTO', 
+#                                                 'SAMSAT PURWOKERTO III', 'SAMSAT PATEN SOKARAJA', 'SAMSAT RITA MALL PURWOKERTO', 
+#                                                 'SAMSAT RITA MALL PURWOKERTO MALAM']:
+#                             total_purwokerto += item['jml_sw']
+#                         elif item['kantor_jr'] in ['SAMSAT PURBALINGGA', 'SAMSAT PURBALINGGA II', 'SAMSAT PATEN BUKATEJA', 
+#                                                 'SAMSAT MALAM PURBALINGGA']:
+#                             total_purbalingga += item['jml_sw']
+#                         elif item['kantor_jr'] in ['SAMSAT BANJARNEGARA', 'SAMSAT KELILING BANJARNEGARA', 
+#                                                 'SAMSAT KELILING BANJARNEGARA II', 'SAMSAT GERAI SWALAYAN PELITA']:
+#                             total_banjarnegara += item['jml_sw']
+#                         elif item['kantor_jr'] == 'SAMSAT MAJENANG':
+#                             total_majenang += item['jml_sw']
+#                         elif item['kantor_jr'] in ['SAMSAT CILACAP', 'SAMSAT CILACAP II', 'SAMSAT KELILING CILACAP MALAM']:
+#                             total_cilacap += item['jml_sw']
+#                         elif item['kantor_jr'] in ['SAMSAT WANGON', 'SAMSAT KELILING WANGON']:
+#                             total_wangon += item['jml_sw']
                             
-            if data_2023:
-                for item in data_2023:
-                    if item['kantor_jr'] in ['SAMSAT PURWOKERTO', 'SAMSAT PURWOKERTO II', 'SAMSAT CEPAT PURWOKERTO', 
-                                            'SAMSAT PURWOKERTO III', 'SAMSAT PATEN SOKARAJA', 'SAMSAT RITA MALL PURWOKERTO', 
-                                            'SAMSAT RITA MALL PURWOKERTO MALAM']:
-                        total_purwokerto_2023 += item['jml_sw']
-                    elif item['kantor_jr'] in ['SAMSAT PURBALINGGA', 'SAMSAT PURBALINGGA II', 'SAMSAT PATEN BUKATEJA', 
-                                            'SAMSAT MALAM PURBALINGGA']:
-                        total_purbalingga_2023 += item['jml_sw']
-                    elif item['kantor_jr'] in ['SAMSAT BANJARNEGARA', 'SAMSAT KELILING BANJARNEGARA', 
-                                            'SAMSAT KELILING BANJARNEGARA II', 'SAMSAT GERAI SWALAYAN PELITA']:
-                        total_banjarnegara_2023 += item['jml_sw']
-                    elif item['kantor_jr'] == 'SAMSAT MAJENANG':
-                        total_majenang_2023 += item['jml_sw']
-                    elif item['kantor_jr'] in ['SAMSAT CILACAP', 'SAMSAT CILACAP II', 'SAMSAT KELILING CILACAP MALAM']:
-                        total_cilacap_2023 += item['jml_sw']
-                    elif item['kantor_jr'] in ['SAMSAT WANGON', 'SAMSAT KELILING WANGON']:
-                        total_wangon_2023 += item['jml_sw']
+#             if data_2023:
+#                 for item in data_2023:
+#                     if item['kantor_jr'] in ['SAMSAT PURWOKERTO', 'SAMSAT PURWOKERTO II', 'SAMSAT CEPAT PURWOKERTO', 
+#                                             'SAMSAT PURWOKERTO III', 'SAMSAT PATEN SOKARAJA', 'SAMSAT RITA MALL PURWOKERTO', 
+#                                             'SAMSAT RITA MALL PURWOKERTO MALAM']:
+#                         total_purwokerto_2023 += item['jml_sw']
+#                     elif item['kantor_jr'] in ['SAMSAT PURBALINGGA', 'SAMSAT PURBALINGGA II', 'SAMSAT PATEN BUKATEJA', 
+#                                             'SAMSAT MALAM PURBALINGGA']:
+#                         total_purbalingga_2023 += item['jml_sw']
+#                     elif item['kantor_jr'] in ['SAMSAT BANJARNEGARA', 'SAMSAT KELILING BANJARNEGARA', 
+#                                             'SAMSAT KELILING BANJARNEGARA II', 'SAMSAT GERAI SWALAYAN PELITA']:
+#                         total_banjarnegara_2023 += item['jml_sw']
+#                     elif item['kantor_jr'] == 'SAMSAT MAJENANG':
+#                         total_majenang_2023 += item['jml_sw']
+#                     elif item['kantor_jr'] in ['SAMSAT CILACAP', 'SAMSAT CILACAP II', 'SAMSAT KELILING CILACAP MALAM']:
+#                         total_cilacap_2023 += item['jml_sw']
+#                     elif item['kantor_jr'] in ['SAMSAT WANGON', 'SAMSAT KELILING WANGON']:
+#                         total_wangon_2023 += item['jml_sw']
                         
-            return render_template('index.html', data_2023=data_2023, total_jml_sw_2023=total_jml_sw_2023,
-                                   data_2024=data_2024, total_jml_sw_2024=total_jml_sw_2024,
-                                   start_date_2023=start_date_2023, end_date_2023=end_date_2023,
-                                   start_date_2024=start_date_2024, end_date_2024=end_date_2024,
-                                   bulanan_2023=bulanan_2023, total_2023=total_2023,
-                                   bulanan_2024=bulanan_2024, total_2024=total_2024,
-                                   bulanan_2023_purwokerto=bulanan_2023_purwokerto, total_2023_purwokerto=total_2023_purwokerto,
-                                   bulanan_2024_purwokerto=bulanan_2024_purwokerto, total_2024_purwokerto=total_2024_purwokerto,
-                                   total_purwokerto=total_purwokerto, total_purbalingga=total_purbalingga,
-                                   total_banjarnegara=total_banjarnegara, total_majenang=total_majenang,
-                                   total_cilacap=total_cilacap, total_wangon=total_wangon, total_purwokerto_2023=total_purwokerto_2023, total_purbalingga_2023=total_purbalingga_2023,
-                                   total_banjarnegara_2023=total_banjarnegara_2023, total_majenang_2023=total_majenang_2023,
-                                   total_cilacap_2023=total_cilacap_2023, total_wangon_2023=total_wangon_2023)
+#             return render_template('index.html', data_2023=data_2023, total_jml_sw_2023=total_jml_sw_2023,
+#                                    data_2024=data_2024, total_jml_sw_2024=total_jml_sw_2024,
+#                                    start_date_2023=start_date_2023, end_date_2023=end_date_2023,
+#                                    start_date_2024=start_date_2024, end_date_2024=end_date_2024,
+#                                    bulanan_2023=bulanan_2023, total_2023=total_2023,
+#                                    bulanan_2024=bulanan_2024, total_2024=total_2024,
+#                                    bulanan_2023_purwokerto=bulanan_2023_purwokerto, total_2023_purwokerto=total_2023_purwokerto,
+#                                    bulanan_2024_purwokerto=bulanan_2024_purwokerto, total_2024_purwokerto=total_2024_purwokerto,
+#                                    total_purwokerto=total_purwokerto, total_purbalingga=total_purbalingga,
+#                                    total_banjarnegara=total_banjarnegara, total_majenang=total_majenang,
+#                                    total_cilacap=total_cilacap, total_wangon=total_wangon, total_purwokerto_2023=total_purwokerto_2023, total_purbalingga_2023=total_purbalingga_2023,
+#                                    total_banjarnegara_2023=total_banjarnegara_2023, total_majenang_2023=total_majenang_2023,
+#                                    total_cilacap_2023=total_cilacap_2023, total_wangon_2023=total_wangon_2023)
 
-    return render_template('index.html', data_2023=None, data_2024=None, bulanan_2023=bulanan_2023, total_2023=total_2023,
-                           bulanan_2024=bulanan_2024, total_2024=total_2024,
-                           bulanan_2023_purwokerto=bulanan_2023_purwokerto, total_2023_purwokerto=total_2023_purwokerto,
-                                   bulanan_2024_purwokerto=bulanan_2024_purwokerto, total_2024_purwokerto=total_2024_purwokerto,
-                           total_purwokerto=total_purwokerto, total_purbalingga=total_purbalingga,
-                           total_banjarnegara=total_banjarnegara, total_majenang=total_majenang,
-                           total_cilacap=total_cilacap, total_wangon=total_wangon, total_purwokerto_2023=total_purwokerto_2023, total_purbalingga_2023=total_purbalingga_2023,
-                                   total_banjarnegara_2023=total_banjarnegara_2023, total_majenang_2023=total_majenang_2023,
-                                   total_cilacap_2023=total_cilacap_2023, total_wangon_2023=total_wangon_2023)
+#     return render_template('index.html', data_2023=None, data_2024=None, bulanan_2023=bulanan_2023, total_2023=total_2023,
+#                            bulanan_2024=bulanan_2024, total_2024=total_2024,
+#                            bulanan_2023_purwokerto=bulanan_2023_purwokerto, total_2023_purwokerto=total_2023_purwokerto,
+#                                    bulanan_2024_purwokerto=bulanan_2024_purwokerto, total_2024_purwokerto=total_2024_purwokerto,
+#                            total_purwokerto=total_purwokerto, total_purbalingga=total_purbalingga,
+#                            total_banjarnegara=total_banjarnegara, total_majenang=total_majenang,
+#                            total_cilacap=total_cilacap, total_wangon=total_wangon, total_purwokerto_2023=total_purwokerto_2023, total_purbalingga_2023=total_purbalingga_2023,
+#                                    total_banjarnegara_2023=total_banjarnegara_2023, total_majenang_2023=total_majenang_2023,
+#                                    total_cilacap_2023=total_cilacap_2023, total_wangon_2023=total_wangon_2023)
 
 
 if __name__ == '__main__':
