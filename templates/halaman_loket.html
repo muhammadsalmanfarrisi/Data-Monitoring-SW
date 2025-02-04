@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Monitoring SW {{ data_kantor.kantor_jr }}</title>
+    <title>Dashboard Monitoring SW Loket Kanwil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -116,133 +116,132 @@
 <body>
 
 <div class="container py-5">
-    <h1 class="text-center mb-4">Dashboard Monitoring SW {{ kantor_jr }}</h1>
+    <h1 class="text-center mb-4">Dashboard Monitoring SW Loket Kanwil</h1>
     <!-- Diagram Batang untuk Total Jml SW 2023 dan 2024 -->
-<!-- Total Data Section -->
-<div class="row mt-4">
-    <div class="col-md-6">
-        <div class="card">
-            <h3>Total SW {{ previous_year }}</h3>
-            <p class="display-4 rupiah-value">{{ total_2023 }}</p>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <h3>Total SW {{ previous_year }}</h3>
+                <p class="display-4 rupiah-value">{{ total_2023 }}</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <h3>Total SW {{ current_year }}</h3>
+                <p class="display-4 rupiah-value">{{ total_2024 }}</p>
+                <p class="percentage-change">
+                    {% set diff = total_2024 - total_2023 %}
+                    {% set percent_change = (diff / total_2023) * 100 %}
+                    <i class="rupiah-value">{{ diff }}</i> <br>
+                    <span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                        
+                        {% if diff > 0 %}
+                            <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                        {% elif diff < 0 %}
+                            <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                        {% else %}
+                            <i class="fa fa-arrow-right"></i> 0%
+                        {% endif %}
+                    </span>
+                </p>
+                
+            </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card">
-            <h3>Total SW {{ current_year }}</h3>
-            <p class="display-4 rupiah-value">{{ total_2024 }}</p>
-            <p class="percentage-change">
-                {% set diff = total_2024 - total_2023 %}
-                {% set percent_change = (diff / total_2023) * 100 %}
-                <i class="rupiah-value">{{ diff }}</i> <br>
-                <span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
-                    
-                    {% if diff > 0 %}
-                        <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                    {% elif diff < 0 %}
-                        <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
-                    {% else %}
-                        <i class="fa fa-arrow-right"></i> 0%
-                    {% endif %}
-                </span>
-            </p>
-            
-        </div>
+    <div class="mt-4 text-center">
+        <button id="startRefreshBtn" class="btn btn-success">Start Auto Refresh</button>
+        <button id="stopRefreshBtn" class="btn btn-danger" style="display: none;">Stop Auto Refresh</button>
     </div>
-</div>
-<div class="mt-4 text-center">
-    <button id="startRefreshBtn" class="btn btn-success">Start Auto Refresh</button>
-    <button id="stopRefreshBtn" class="btn btn-danger" style="display: none;">Stop Auto Refresh</button>
-</div>
-<!-- Chart Section -->
-<div class="chart-container mt-5">
-    <canvas id="chartSW" width="400" height="200"></canvas>
-</div><br>
-<script>
-    var ctx = document.getElementById('chartSW').getContext('2d');
-    var chartSW = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: '{{ previous_year }}',
-                    data: {{ bulanan_2023 }},
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    fill: false
-                },
-                {
-                    label: '{{ current_year }}',
-                    data: {{ bulanan_2024 }},
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    fill: false
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Jumlah SW'
+    <!-- Chart Section -->
+    <div class="chart-container mt-5">
+        <canvas id="chartSW" width="400" height="200"></canvas>
+    </div><br>
+    <script>
+        var ctx = document.getElementById('chartSW').getContext('2d');
+        var chartSW = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: '{{ previous_year }}',
+                        data: {{ bulanan_2023 }},
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: false
+                    },
+                    {
+                        label: '{{ current_year }}',
+                        data: {{ bulanan_2024 }},
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: false
                     }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Bulan'
-                    }
-                }
+                ]
             },
-            plugins: {
-                legend: {
-                    display: true,
-                    labels: {
-                        color: '#333',
-                        font: {
-                            size: 14,
-                            weight: 'bold'
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Jumlah SW'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Bulan'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: '#333',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-</script>
-<h1>Perbandingan Data Pendapatan SW {{ kantor_jr }} {{ tahun_start_date_2023 }} dan {{ tahun_start_date_2024 }}</h1><br><br>
+        });
+    </script>
+
+<h1>Perbandingan Data Pendapatan SW Loket Kanwil {{ tahun_start_date_2023 }} dan {{ tahun_start_date_2024 }}</h1><br><br>
 <div class="row">
     <div class="col-md-4">
         <div class="card">
             <h3>Total Jml SW {{ tahun_start_date_2023 }}:</h3>
-            <p><H4>{{ start_date_2023 }} s/d {{ end_date_2023 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2023 }}</span></p>
+            <p><H4>{{ start_date_2023 }} s/d {{ end_date_2023 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2023_filtered }}</span></p>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card">
             <h3>Total Jml SW {{ tahun_start_date_2024 }}:</h3>
-            <p><H4>{{ start_date_2024 }} s/d {{ end_date_2024 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2024 }}</span></p>
+            <p><H4>{{ start_date_2024 }} s/d {{ end_date_2024 }}</H4> <span class="rupiah-value total-sw">{{ total_jml_sw_2024_filtered }}</span></p>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card">
             <h3>Growth</h3>
             <p><strong>
-                {% set diff = total_jml_sw_2024 - total_jml_sw_2023 %}
-                {% set percent_change = (diff / total_jml_sw_2023) * 100 %}
-            </strong> <span class="rupiah-value total-sw">{{ diff }}</span></p>
-            <h4><span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+               
+            </strong> <span class="rupiah-value total-sw">{{ kabeh_diff }}</span></p>
+            <h4><span class="{{ 'text-success' if kabeh_diff > 0 else 'text-danger' }}">
                     
-                {% if diff > 0 %}
-                    <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
-                {% elif diff < 0 %}
-                    <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                {% if kabeh_diff > 0 %}
+                    <i class="fa fa-arrow-up"></i> +{{ kabeh_percent_change | round(2) }}%
+                {% elif kabeh_diff < 0 %}
+                    <i class="fa fa-arrow-down"></i> {{ kabeh_percent_change | round(2) }}%
                 {% else %}
                     <i class="fa fa-arrow-right"></i> 0%
                 {% endif %}
@@ -270,7 +269,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in data_kantor %}
+                    {% for item in data_kantor_terbatas %}
                     <tr>
                         <td><a href="{{ url_for('halaman_tertuju', kode_kantor_jr=item.kode_kantor_jr) }}?kantor_jr={{ item.kantor_jr }}" target="_blank">{{ item.kantor_jr }}</a></td>
                         <td class="rupiah-value">{{ item.total_sw_2023 }}</td>
@@ -309,8 +308,8 @@
     var barCtx = document.getElementById('barChartSW').getContext('2d');
     
     // Gantilah variabel di bawah dengan data yang sesuai dari server
-    var total_jml_sw_2023 = {{ total_jml_sw_2023 }}; // Misalnya 68000000000 untuk 2023
-    var total_jml_sw_2024 = {{ total_jml_sw_2024 }}; // Misalnya 45000000000 untuk 2024
+    var total_jml_sw_2023_filtered = {{ total_jml_sw_2023_filtered }}; // Misalnya 68000000000 untuk 2023
+    var total_jml_sw_2024_filtered = {{ total_jml_sw_2024_filtered }}; // Misalnya 45000000000 untuk 2024
 
     var barChartSW = new Chart(barCtx, {
         type: 'bar',
@@ -318,7 +317,7 @@
             labels: ['{{ tahun_start_date_2023 }}', '{{ tahun_start_date_2024 }}'],
             datasets: [{
                 label: 'Total Jml SW',
-                data: [total_jml_sw_2023, total_jml_sw_2024],
+                data: [total_jml_sw_2023_filtered, total_jml_sw_2024_filtered],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.6)',  // Warna batang untuk 2024
                     'rgba(75, 192, 192, 0.6)' // Warna batang untuk 2023
@@ -340,7 +339,7 @@
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: Math.ceil(total_jml_sw_2023 * 1.1), // Menambah 10% dari nilai maksimum
+                    max: Math.ceil(total_jml_sw_2023_filtered * 1.1), // Menambah 10% dari nilai maksimum
                     title: {
                         display: true,
                         text: 'Jumlah SW'
