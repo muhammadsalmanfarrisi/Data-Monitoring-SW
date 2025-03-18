@@ -156,7 +156,43 @@
         <div class="mt-4 text-center">
             <button id="startRefreshBtn" class="btn btn-success">Start Auto Refresh</button>
             <button id="stopRefreshBtn" class="btn btn-danger" style="display: none;">Stop Auto Refresh</button>
+        </div><br><br>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <h4><strong>Total Jml SW {{ previous_year }}:</strong></h4>
+                    <p><h5>{{ start_date_lastyear }} s/d {{ end_date_lastyear }}</h5> <br><h3><strong><span class="rupiah-value">{{ total_sw_lastyear_today }}</span></strong></h3></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <h4><strong>Total Jml SW {{ current_year }}:</strong></h4>
+                    <p><h5>{{ start_date_thisyear }} s/d {{ end_date_thisyear }}</h5> <br><h3><strong><span class="rupiah-value">{{ total_sw_thisyear_today }}</span></strong></h3></p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <h3>Growth</h3>
+                    <p><strong>
+                        {% set diff = total_sw_thisyear_today - total_sw_lastyear_today %}
+                        {% set percent_change = (diff / total_sw_lastyear_today) * 100 %}
+                    </strong> <span class="rupiah-value total-sw">{{ diff }}</span></p>
+                    <h4><span class="{{ 'text-success' if diff > 0 else 'text-danger' }}">
+                            
+                        {% if diff > 0 %}
+                            <i class="fa fa-arrow-up"></i> +{{ percent_change | round(2) }}%
+                        {% elif diff < 0 %}
+                            <i class="fa fa-arrow-down"></i> {{ percent_change | round(2) }}%
+                        {% else %}
+                            <i class="fa fa-arrow-right"></i> 0%
+                        {% endif %}
+                    </span></h4>
+                </div>
+            </div>
         </div>
+
+        
         <!-- Chart Section -->
         <div class="chart-container mt-5">
             <canvas id="chartSW" width="400" height="200"></canvas>

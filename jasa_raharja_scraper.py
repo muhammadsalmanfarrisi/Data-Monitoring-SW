@@ -7,6 +7,11 @@ import time
 from flask import session
 from flask import Flask, render_template, request, session
 import os
+from datetime import date
+from datetime import datetime, timedelta
+from calendar import monthrange
+from concurrent.futures import ThreadPoolExecutor
+import requests
 
 
 app = Flask(__name__)
@@ -22,13 +27,13 @@ def ambil_data(url, retries=3, timeout=10):
 
     # Menambahkan cookies yang Anda salin dari browser (Ganti dengan cookies yang relevan)
     cookies = {
-        'XSRF-TOKEN': 'eyJpdiI6ImhIRUdTMUc5NkJwbUwyUzl5NjcvMGc9PSIsInZhbHVlIjoici9VaXhjR0wvSjBCNTdsRjdOV0FiOStaTVZRVy81LzVKMmV0aUZYUGgyQ29sdmZNeHNWd0g4ZkFYNzFRbi9QaDVJajlYWDloR2NneHdEVCtCY2hFdzBIMm1ORkhnM3VKNnZCcG1nUm05d215UmVJQ2VRT2JibUhhYmNWcTRPU2MiLCJtYWMiOiIwNzI1N2I1MjQyNjk5NDIzMDVhMWYzYmIxMmI4YjJjOTdmODdhYjZhM2ZiZWU5MzFlMGQ2ODkyOTU2OGM1ZGVkIiwidGFnIjoiIn0%3D',
+        'XSRF-TOKEN': 'eyJpdiI6IkNwSkhSL2lwUTZ2dkxlRUtKME9FVHc9PSIsInZhbHVlIjoicFZnOFFZb0hwcm9ueWphNGZGeDNwb0Jtdm9PbXVaL0xndnd3ekpIYWJyOXQ1VlRoWkhqNlBJazZCRTl0UStjUngvbzVPZDRBWGxSTnlLNFNmek1oR2hnNFRyeFgwYU9vMTF4MFIyQ3E1dmtzZUxmUytqbVg3MW5GRElLSmlVK2QiLCJtYWMiOiJjYTc4ODA4OWY2OTJmZjcwZTY4NmNmZmI1NzBhMGNkNDY5ZmE0M2VhMTJmMjkwYjRkOWExNzljYzA1NTcxNGE3IiwidGFnIjoiIn0%3D',
         '_ga': 'GA1.1.140722331.1727057868',
         '_ga_JQ088T32QP': 'GS1.1.1727061610.2.1.1727061629.0.0.0', 
         '_ga_VNWN27RPNX': 'GS1.3.1727061611.2.0.1727061611.60.0.0', 
-        'ceri_session': 'eyJpdiI6InlBcE81VEhzVjdBK0dKcElWOU9PSEE9PSIsInZhbHVlIjoid2ZFbnpISTZpcXFJOUw2ZHpST29pTjd6WHZGKytUY0hJMUxkakJReUNJSTVWanpBQkw3OXJ4czBWSDY5RUxPSGZEM1pWK2hYU0NsZjQxbFEvb3Q0R1U5Z1gyVjdFTGV1emM3cXpzYXBod0dadzVJRnRsMStVWGo5QThBUE84enAiLCJtYWMiOiIyZThhY2Q2YTUxMjY4OTcxYzliMGQ5YjFlNzM1MzExNTNhZDAxZTU2YTNhYzQwMjU5Mjk3MWM2NmY4OTNjNzUxIiwidGFnIjoiIn0%3D',
+        'ceri_session': 'eyJpdiI6Im5BSTJPWGtodjhrdE96Y0RacVZKRmc9PSIsInZhbHVlIjoiQXM4UWhWRzJsUlJMYVVRUUc2dzhnRUdiRyt6NHdjTmRsVy96Ynp3cjRYMTMyeVFHcXlMbUtnY1NhaTJTSVdTWTBQcmwzdWoxSnJGTzNyN2NKU2VnVk0xUG05ZkcybHcwZkxKbDV5eWV0Y0U1ZVBsY0VDTTk3cTRGbzNIN21CSEUiLCJtYWMiOiIyMWE5NmZlZWU3ZDVmZDQ1YWY3ZmYyMWNhNDIwYjQ0MzZjYjlhZDY4OTkyMGNlZTYwNjFlNzU0OWQwMzEzNmQ0IiwidGFnIjoiIn0%3D',
         'cookiesession1': '678B28C4BA1B09254D21278D87A606A5',
-        'jr_cookie': 'c686aabd2eea2ae0eedde6ce73f6d867',
+        'jr_cookie': 'c686aabd2eea2ae0eedde6ce5060d967',
         'remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d': 'eyJpdiI6InFMdjNOT3UzTG9UMktWbHVNWmQyQlE9PSIsInZhbHVlIjoiSjVBNEM5TURzdnZhYjVod1hKQmdUMWhmeG1VeDFTc2ZDd2UySHR3Q3p6OFdUYXFIR1dyK0VwVkx2UWl2WUNWSEdVSlo4R1kySUR3VUVTakNTM2pENHBSZUdITXJOL0VOYW9ZY0dvVkIzeVNGK0YrQTcyQ29nVDc1QVR6WnEyRXBueVlqMkNDVHVhWEpTb2RFWE53WkNnPT0iLCJtYWMiOiJlZDc2YTJhOTJkOWNjODk4ZTFkOGQyNzY0MjM4OTA1ODIyNDVjZWRhMjE1ODcyM2VjZGViNjkyYjI4ZTJhMWU2IiwidGFnIjoiIn0%3D'
     }
 
@@ -107,6 +112,25 @@ def ambil_total_bulanan_paralel(tahun):
             total_jml_sw_all_years += total_jml_sw
         
         return bulanan_totals, total_jml_sw_all_years
+
+def ambil_total_sw_today():
+    today = datetime.now()
+    yesterday = today - timedelta(days=1)
+    
+    # Tahun ini
+    start_date_thisyear = f"{today.year}-01-01"
+    end_date_thisyear = yesterday.strftime("%Y-%m-%d")
+    url_thisyear = f"https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_thisyear}_{end_date_thisyear}_0400001_1"
+    _, total_sw_thisyear_today = ambil_data(url_thisyear)
+    
+    # Tahun lalu
+    start_date_lastyear = f"{today.year - 1}-01-01"
+    end_date_lastyear = (yesterday.replace(year=today.year - 1)).strftime("%Y-%m-%d")
+    url_lastyear = f"https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_lastyear}_{end_date_lastyear}_0400001_1"
+    _, total_sw_lastyear_today = ambil_data(url_lastyear)
+    
+    return total_sw_thisyear_today, total_sw_lastyear_today
+
 
 # Fungsi untuk menghitung total jml_sw per bulan secara paralel
 def ambil_total_bulanan_loket(tahun):
@@ -220,6 +244,28 @@ def index():
     # Ambil total bulanan dan tahunan
     bulanan_2023, total_2023 = ambil_total_bulanan_paralel(previous_year)
     bulanan_2024, total_2024 = ambil_total_bulanan_paralel(current_year)
+    
+    total_sw_thisyear_today, total_sw_lastyear_today = ambil_total_sw_today()
+    
+    today = datetime.now()
+    yesterday = today - timedelta(days=1)
+    
+            
+            
+    start_date_thisyear = f"01-01-{today.year}"
+    end_date_thisyear = yesterday.strftime("%d-%m-%Y")
+    start_date_lastyear = f"01-01-{today.year - 1}"
+    end_date_lastyear = (yesterday.replace(year=today.year - 1)).strftime("%d-%m-%Y")
+    # Ambil total hari ini untuk 2024 dan 2025
+# Ambil total hari ini untuk 2024 dan 2025
+    # (
+    #     (_ , total_sw_2024_today),  # Ambil hanya total dari tuple yang dikembalikan
+    #     (_ , total_sw_2025_today),
+    #     start_date_2024_today, end_date_2024_today,
+    #     start_date_2025_today, end_date_2025_today
+    # ) = ambil_total_sw_today()
+
+
 
     # Inisialisasi data kantor
     data_kantor = []
@@ -248,10 +294,14 @@ def index():
             
             tahun_start_date_2024 = session.get('tahun_start_date_2024')
             
+            
+    
+            
 
             # URL API untuk data 2023 dan 2024
             url_2023 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2023}_{end_date_2023}_0400001_1?_=1731895548035'
             url_2024 = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_2024}_{end_date_2024}_0400001_1?_=1731895548035'
+            
 
             # Ambil data API
             data_2023, total_jml_sw_2023 = ambil_data(url_2023)
@@ -285,10 +335,20 @@ def index():
                                    bulanan_2023=bulanan_2023, total_2023=total_2023, 
                                    bulanan_2024=bulanan_2024, total_2024=total_2024, 
                                    kabeh_sw_2023=kabeh_sw_2023, kabeh_sw_2024=kabeh_sw_2024, 
-                                   kabeh_diff=kabeh_diff, kabeh_percent_change=kabeh_percent_change, current_year=current_year, previous_year=previous_year, tahun_start_date_2023=tahun_start_date_2023, tahun_start_date_2024=tahun_start_date_2024)
+                                   kabeh_diff=kabeh_diff, kabeh_percent_change=kabeh_percent_change, 
+                                   total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today, 
+                                   start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear,
+                                #    total_sw_2024_today=total_sw_2024_today, total_sw_2025_today=total_sw_2025_today,
+                                #    start_date_2024_today=start_date_2024_today, end_date_2024_today=end_date_2024_today, 
+                                #    start_date_2025_today=start_date_2025_today, end_date_2025_today=end_date_2025_today,
+                                   current_year=current_year, previous_year=previous_year, tahun_start_date_2023=tahun_start_date_2023, tahun_start_date_2024=tahun_start_date_2024)
 
     return render_template('index.html', data_kantor=data_kantor, data_2023=None, data_2024=None, 
-                           bulanan_2023=bulanan_2023, total_2023=total_2023, bulanan_2024=bulanan_2024, current_year=current_year, previous_year=previous_year, total_2024=total_2024, tahun_start_date_2023=previous_year, tahun_start_date_2024=current_year)
+                           bulanan_2023=bulanan_2023, total_2023=total_2023, bulanan_2024=bulanan_2024, current_year=current_year, previous_year=previous_year, 
+                        #    total_sw_2024_today=total_sw_2024_today, total_sw_2025_today=total_sw_2025_today, start_date_2024_today=start_date_2024_today, end_date_2024_today=end_date_2024_today, start_date_2025_today=start_date_2025_today, end_date_2025_today=end_date_2025_today,
+                           start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear,
+                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today, 
+                           total_2024=total_2024, tahun_start_date_2023=previous_year, tahun_start_date_2024=current_year)
 
 
 @app.route('/halaman_tertuju/<kode_kantor_jr>', methods=['GET', 'POST'])
