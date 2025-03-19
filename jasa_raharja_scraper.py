@@ -11,7 +11,7 @@ from datetime import date
 from datetime import datetime, timedelta
 from calendar import monthrange
 from concurrent.futures import ThreadPoolExecutor
-import requests
+
 
 
 app = Flask(__name__)
@@ -27,13 +27,13 @@ def ambil_data(url, retries=3, timeout=10):
 
     # Menambahkan cookies yang Anda salin dari browser (Ganti dengan cookies yang relevan)
     cookies = {
-        'XSRF-TOKEN': 'eyJpdiI6IkNwSkhSL2lwUTZ2dkxlRUtKME9FVHc9PSIsInZhbHVlIjoicFZnOFFZb0hwcm9ueWphNGZGeDNwb0Jtdm9PbXVaL0xndnd3ekpIYWJyOXQ1VlRoWkhqNlBJazZCRTl0UStjUngvbzVPZDRBWGxSTnlLNFNmek1oR2hnNFRyeFgwYU9vMTF4MFIyQ3E1dmtzZUxmUytqbVg3MW5GRElLSmlVK2QiLCJtYWMiOiJjYTc4ODA4OWY2OTJmZjcwZTY4NmNmZmI1NzBhMGNkNDY5ZmE0M2VhMTJmMjkwYjRkOWExNzljYzA1NTcxNGE3IiwidGFnIjoiIn0%3D',
+        'XSRF-TOKEN': 'eyJpdiI6IkcxeFNYWHBlNEhNa1VjMnlVMm80a1E9PSIsInZhbHVlIjoiMFpONzhEcWpZNVE4WTdReFZwVjlnN1VQYjRjYXgrdld6N0Z1T0d1Y2h0SlkrNjdvOUZsazk5bGNqdW9xS3F5UjdxRGkyRTRULzVReGMvTWVrbXpNUGtsWXpUKzNLVXczTDhoaThqZ2ZPUFMzT0l3S05abzhJcEZzY3I0Z0s5dnYiLCJtYWMiOiI2YTY1NzhhYmY4MjQ2YTVlNmQ1Y2I5ZTdlZDdjZGE0NTQ1MDRhYjkwMDY5YTE5OWM3NTNkZjJiOTUxYWIxZjRiIiwidGFnIjoiIn0%3D',
         '_ga': 'GA1.1.140722331.1727057868',
         '_ga_JQ088T32QP': 'GS1.1.1727061610.2.1.1727061629.0.0.0', 
         '_ga_VNWN27RPNX': 'GS1.3.1727061611.2.0.1727061611.60.0.0', 
-        'ceri_session': 'eyJpdiI6Im5BSTJPWGtodjhrdE96Y0RacVZKRmc9PSIsInZhbHVlIjoiQXM4UWhWRzJsUlJMYVVRUUc2dzhnRUdiRyt6NHdjTmRsVy96Ynp3cjRYMTMyeVFHcXlMbUtnY1NhaTJTSVdTWTBQcmwzdWoxSnJGTzNyN2NKU2VnVk0xUG05ZkcybHcwZkxKbDV5eWV0Y0U1ZVBsY0VDTTk3cTRGbzNIN21CSEUiLCJtYWMiOiIyMWE5NmZlZWU3ZDVmZDQ1YWY3ZmYyMWNhNDIwYjQ0MzZjYjlhZDY4OTkyMGNlZTYwNjFlNzU0OWQwMzEzNmQ0IiwidGFnIjoiIn0%3D',
+        'ceri_session': 'eyJpdiI6IjlVVmJSV200aFE5d2crSWhkYTdqYWc9PSIsInZhbHVlIjoiWVZscU0rbGlGWjkrU1pwMS83cTNIY0hzL1V5NkRybG5xNDVpeE1PZElwUFdMaFBuZnRjaWdOLzNGeDRXWnpTMXBGLzI2eVltZHRmdDdZVG0rQmozbnNLajJRODdWaUpCVlR2TE9pNTl0aGMvbzVLRzRCVlBTVVc5U21yc0ZwczIiLCJtYWMiOiJlOTk0MzBmNWEwNTNhYmU5NmE2Y2RjYWJiZThjYzIwNzUzYzBmZWM4N2I1YTQ2YjYwNzkzZjE4MWY1YWMyNjgxIiwidGFnIjoiIn0%3D',
         'cookiesession1': '678B28C4BA1B09254D21278D87A606A5',
-        'jr_cookie': 'c686aabd2eea2ae0eedde6ce5060d967',
+        'jr_cookie': 'c686aabd2eea2ae0eedde6ceef3bda67',
         'remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d': 'eyJpdiI6InFMdjNOT3UzTG9UMktWbHVNWmQyQlE9PSIsInZhbHVlIjoiSjVBNEM5TURzdnZhYjVod1hKQmdUMWhmeG1VeDFTc2ZDd2UySHR3Q3p6OFdUYXFIR1dyK0VwVkx2UWl2WUNWSEdVSlo4R1kySUR3VUVTakNTM2pENHBSZUdITXJOL0VOYW9ZY0dvVkIzeVNGK0YrQTcyQ29nVDc1QVR6WnEyRXBueVlqMkNDVHVhWEpTb2RFWE53WkNnPT0iLCJtYWMiOiJlZDc2YTJhOTJkOWNjODk4ZTFkOGQyNzY0MjM4OTA1ODIyNDVjZWRhMjE1ODcyM2VjZGViNjkyYjI4ZTJhMWU2IiwidGFnIjoiIn0%3D'
     }
 
@@ -131,6 +131,48 @@ def ambil_total_sw_today():
     
     return total_sw_thisyear_today, total_sw_lastyear_today
 
+def ambil_total_sw_today_loket():
+    today = datetime.now()
+    yesterday = today - timedelta(days=1)
+    
+    # Tahun ini
+    start_date_thisyear = f"{today.year}-01-01"
+    end_date_thisyear = yesterday.strftime("%Y-%m-%d")
+    url_thisyear = f"https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_thisyear}_{end_date_thisyear}_0400001_1"
+    
+    data_thisyear, _ = ambil_data(url_thisyear)
+    total_sw_thisyear_today = sum(item['jml_sw'] for item in data_thisyear[:37]) if data_thisyear else 0
+    
+    # Tahun lalu
+    start_date_lastyear = f"{today.year - 1}-01-01"
+    end_date_lastyear = (yesterday.replace(year=today.year - 1)).strftime("%Y-%m-%d")
+    url_lastyear = f"https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_lastyear}_{end_date_lastyear}_0400001_1"
+    
+    data_lastyear, _ = ambil_data(url_lastyear)
+    total_sw_lastyear_today = sum(item['jml_sw'] for item in data_lastyear[:37]) if data_lastyear else 0
+    
+    return total_sw_thisyear_today, total_sw_lastyear_today
+
+
+def ambil_total_sw_today_kantor(kode_kantor_jr):
+    today = datetime.now()
+    yesterday = today - timedelta(days=1)
+    
+    # Tahun ini
+    start_date_thisyear = f"{today.year}-01-01"
+    end_date_thisyear = yesterday.strftime("%Y-%m-%d")
+    url_thisyear = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_thisyear}_{end_date_thisyear}_{kode_kantor_jr}_2?_=1731895548035'
+    _, total_sw_thisyear_today = ambil_data(url_thisyear)
+    
+    # Tahun lalu
+    start_date_lastyear = f"{today.year - 1}-01-01"
+    end_date_lastyear = (yesterday.replace(year=today.year - 1)).strftime("%Y-%m-%d")
+    url_lastyear = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date_lastyear}_{end_date_lastyear}_{kode_kantor_jr}_2?_=1731895548035'
+    
+    _, total_sw_lastyear_today = ambil_data(url_lastyear)
+    
+    return total_sw_thisyear_today, total_sw_lastyear_today
+
 
 # Fungsi untuk menghitung total jml_sw per bulan secara paralel
 def ambil_total_bulanan_loket(tahun):
@@ -138,7 +180,8 @@ def ambil_total_bulanan_loket(tahun):
         futures = []
         for bulan in range(1, 13):
             start_date = f"01-{bulan:02d}-{tahun}"
-            end_date = f"31-{bulan:02d}-{tahun}"  # Memastikan batas akhir bulan tetap 31
+            end_day = monthrange(tahun, bulan)[1]  # Mendapatkan tanggal akhir yang tepat untuk bulan tersebut
+            end_date = f"{end_day}-{bulan:02d}-{tahun}"
 
             url = f'https://ceri.jasaraharja.co.id/monitoring/swdkllj/datatables/{start_date}_{end_date}_0400001_1?_=1733116412480'
             futures.append(executor.submit(ambil_data, url))  # Menjalankan ambil_data secara paralel
@@ -151,7 +194,7 @@ def ambil_total_bulanan_loket(tahun):
             
             # Pastikan result tidak None sebelum slicing
             if result is not None:
-                limited_result = result[:31]  # Ambil hanya 31 data pertama
+                limited_result = result[:37]  # Ambil hanya 31 data pertama
                 
                 # Hitung ulang total_jml_sw dari data yang sudah dibatasi
                 total_jml_sw = sum(item['jml_sw'] for item in limited_result)
@@ -351,6 +394,214 @@ def index():
                            total_2024=total_2024, tahun_start_date_2023=previous_year, tahun_start_date_2024=current_year)
 
 
+def kelompokkan_data(data_kantor):
+    kelompok_mapping = {
+        "SAMSAT KENDAL": [
+            "SAMSAT KENDAL", "SAMSAT KENDAL II"
+        ],
+        "SAMSAT DEMAK": [
+            "SAMSAT DEMAK", "SAMSAT DEMAK II", "SAMSAT DEMAK III", 
+            "SAMSAT PATEN MIJEN", "SAMSAT PATEN MRANGGEN", "SAMSAT PATEN SAYUNG"
+        ],
+        "SAMSAT PURWODADI": [
+            "SAMSAT PURWODADI", "SAMSAT PURWODADI II", "SAMSAT PATEN WIROSARI", 
+            "SAMSAT SEKOLAH KABUPATEN GROBOGAN", "SAMSAT PATEN GUBUG", "SAMKEL RAZIA GROBOGAN"
+        ],
+        "SAMSAT SALATIGA": [
+            "SAMSAT SALATIGA", "SAMSAT KELILING SALATIGA", "SAMSAT KELILING SALATIGA MALAM"
+        ],
+        "SAMSAT UNGARAN": [
+            "SAMSAT UNGARAN", "SAMSAT UNGARAN II", "SAMSAT GERAI UNGARAN", 
+            "SAMSAT KELILING UNGARAN II", "SAMSAT PATEN TENGARAN", 
+            "SAMSAT GERAI TUNTANG", "SAMSAT GERAI AMBARAWA"
+        ],
+        "E-SAMSAT": [
+            "E-SAMSAT BPD JATENG", "E-SAMSAT BNI", "E-SAMSAT BANK MANDIRI", 
+            "E-SAMSAT BRI", "E-SAMSAT BANK CIMB NIAGA", "E-SAMSAT BCA", 
+            "LOKET E-SAMSAT KANTOR POS", "E-SAMSAT BPR GROBOGAN", "E-SAMSAT BTN", 
+            "SAMSAT ONLINE NASIONAL JAWA TENGAH"
+        ],
+        
+        # jeda
+        "SAMSAT SURAKARTA": [
+            "SAMSAT SURAKARTA II", "SAMSAT CEPAT SURAKARTA", "SAMSAT MALAM SURAKARTA", 
+            "SAMSAT SIAGA SURAKARTA"
+        ],
+        "SAMSAT KLATEN": [
+            "SAMSAT KLATEN", "SAMSAT KLATEN II", "SAMSAT KELILING MALAM KLATEN"
+        ],
+        "SAMSAT BOYOLALI": [
+            "SAMSAT BOYOLALI", "SAMSAT BOYOLALI II", "SAMSAT KELILING MALAM BOYOLALI"
+        ],
+        "SAMSAT SRAGEN": [
+            "SAMSAT SRAGEN", "SAMSAT KELILING SRAGEN", "SAMSAT KELILING MALAM SRAGEN", 
+            "SAMSAT PATEN TANON"
+        ],
+        "SAMSAT PRAMBANAN": [
+            "SAMSAT PRAMBANAN"
+        ],
+        "SAMSAT DELANGGU": [
+            "SAMSAT DELANGGU"
+        ],
+        "SAMSAT MAGELANG": [
+            "SAMSAT MAGELANG", "SAMSAT CEPAT KOTA MAGELANG", "SAMSAT MALAM KOTA MAGELANG"
+        ],
+        "SAMSAT PURWOREJO": [
+            "SAMSAT PURWOREJO", "SAMSAT PURWOREJO II", "SAMSAT PATEN KUTOARJO"
+        ],
+        "SAMSAT KEBUMEN": [
+            "SAMSAT KEBUMEN", "SAMSAT KEBUMEN II", "SAMSAT CEPAT GOMBONG"
+        ],
+        "SAMSAT TEMANGGUNG": [
+            "SAMSAT TEMANGGUNG", "SAMSAT TEMANGGUNG II"
+        ],
+        "SAMSAT WONOSOBO": [
+            "SAMSAT WONOSOBO", "SAMSAT WONOSOBO II"
+        ],
+        "SAMSAT MUNGKID": [
+            "SAMSAT MUNGKID", "SAMSAT MUNGKID II", "SAMSAT MALAM KABUPATEN MAGELANG"
+        ],
+        "SAMSAT BAGELEN": [
+            "SAMSAT BAGELEN"
+        ],
+        "SAMSAT PURWOKERTO": [
+            "SAMSAT PURWOKERTO", "SAMSAT PURWOKERTO II", "SAMSAT CEPAT PURWOKERTO", 
+            "SAMSAT RITA MALL PURWOKERTO MA"
+        ],
+        "SAMSAT PURBALINGGA": [
+            "SAMSAT PURBALINGGA", "SAMSAT PURBALINGGA II", "SAMSAT PATEN BUKATEJA"
+        ],
+        "SAMSAT BANJARNEGARA": [
+            "SAMSAT BANJARNEGARA", "SAMSAT KELILING BANJARNEGARA", "SAMSAT KELILING BANJARNEGARA II", 
+            "SAMSAT GERAI SWALAYAN PELITA"
+        ],
+        "SAMSAT MAJENANG": [
+            "SAMSAT MAJENANG"
+        ],
+        "SAMSAT CILACAP": [
+            "SAMSAT CILACAP", "SAMSAT CILACAP II", "SAMSAT KELILING CILACAP MALAM"
+        ],
+        "SAMSAT WANGON": [
+            "SAMSAT WANGON", "SAMSAT KELILING WANGON"
+        ],
+        "SAMSAT PEKALONGAN": [
+            "SAMSAT PEKALONGAN", "SAMSAT CEPAT PEKALONGAN", "SAMSAT KELILING KOTA PEKALONGAN"
+        ],
+        "SAMSAT PEMALANG": [
+            "SAMSAT PEMALANG", "SAMSAT PEKALONGAN II", "SAMSAT PEMALANG MALAM"
+        ],
+        "SAMSAT TEGAL": [
+            "SAMSAT TEGAL", "SAMSAT KELILING TEGAL"
+        ],
+        "SAMSAT BREBES": [
+            "SAMSAT BREBES", "SAMSAT PATEN LARANGAN"
+        ],
+        "SAMSAT BATANG": [
+            "SAMSAT BATANG", "SAMSAT BATANG II", "SAMSAT PATEN LIMPUNG", 
+            "SAMSAT KELILING BATANG MALAM"
+        ],
+        "SAMSAT KAJEN": [
+            "SAMSAT KAJEN", "SAMSAT KAJEN II"
+        ],
+        "SAMSAT SLAWI": [
+            "SAMSAT SLAWI", "SAMSAT KELILING SLAWI"
+        ],
+        "SAMSAT BUMIAYU": [
+            "SAMSAT BUMIAYU"
+        ],
+        "SAMSAT TANJUNG": [
+            "SAMSAT TANJUNG"
+        ],
+        "SAMSAT PATI": [
+            "SAMSAT PATI", "SAMSAT PATI II", "SAMSAT CEPAT PATI", 
+            "SAMSAT KELILING PATI II", "SAMSAT SAJAK PATI"
+        ],
+        "SAMSAT KUDUS": [
+            "SAMSAT KUDUS", "SAMSAT KELILING KUDUS"
+        ],
+        "SAMSAT JEPARA": [
+            "SAMSAT JEPARA", "SAMSAT KARIMUNJAWA", "SAMSAT JEPARA II", 
+            "SAMSAT PATEN MAYONG", "SAMSAT JEPARA III", "SAMSAT MALAM JEPARA", 
+            "SAMSAT GERAI KELET"
+        ],
+        "SAMSAT REMBANG": [
+            "SAMSAT REMBANG", "SAMSAT REMBANG II", "SAMSAT PATEN KALIORI", 
+            "SAMSAT KELILING REMBANG II", "SAMSAT SAJAK REMBANG"
+        ],
+        "SAMSAT BLORA": [
+            "SAMSAT BLORA", "SAMSAT BLORA II", "SAMSAT PATEN KUNDURAN", 
+            "SAMSAT PATEN RANDUBLATUNG"
+        ],
+        "SAMSAT CEPU": [
+            "SAMSAT CEPU"
+        ],
+        "SAMSAT SEMARANG I": [
+            "SAMSAT SEMARANG I", "SAMSAT SEMARANG IV", "SAMSAT CEPAT SEMARANG I", 
+            "SAMSAT MALL CIPUTRA"
+        ],
+        "SAMSAT SEMARANG II": [
+            "SAMSAT SEMARANG II", "SAMSAT SEMARANG V"
+        ],
+        "SAMSAT SEMARANG III": [
+            "SAMSAT SEMARANG III", "SAMSAT KELILING SEMARANG III", "SAMSAT UNNES"
+        ],
+        "SAMSAT SUKOHARJO": [
+            "SAMSAT SUKOHARJO", "SAMSAT SUKOHARJO II", "SAMSAT MALL THE PARK", 
+            "SAMSAT GERAI SINGOPURAN", "SAMSAT THE PARK MALAM", "SAMSAT MALAM TOSERBA"
+        ],
+        "SAMSAT KARANGANYAR": [
+            "SAMSAT KARANGANYAR", "SAMSAT KARANGANYAR II"
+        ],
+        "SAMSAT WONOGIRI": [
+            "SAMSAT WONOGIRI", "SAMSAT PATEN EROMOKO", "SAMSAT KELILING WONOGIRI", 
+            "SAMSAT GERAI TOKO BARU MALAM"
+        ],
+        "SAMSAT PURWANTORO": [
+            "SAMSAT PURWANTORO"
+        ],
+        "SAMSAT BATURETNO": [
+            "SAMSAT BATURETNO"
+        ]
+
+    }
+
+    hasil_kelompok = {}
+
+    for item in data_kantor:
+        kode_kantor = item['kode_kantor_jr']
+        kantor_jr = item["kantor_jr"]
+        total_sw_2023 = item["total_sw_2023"]
+        total_sw_2024 = item["total_sw_2024"]
+
+        # Cari kelompok untuk kantor_jr ini
+        kelompok_ditemukan = None
+        for kelompok, daftar_kantor in kelompok_mapping.items():
+            if kantor_jr in daftar_kantor:
+                kelompok_ditemukan = kelompok
+                break
+
+        if kelompok_ditemukan:
+            if kelompok_ditemukan not in hasil_kelompok:
+                hasil_kelompok[kelompok_ditemukan] = {
+                    "total_sw_2023": 0,
+                    "total_sw_2024": 0,
+                    "anggota": []
+                }
+
+            # Tambahkan nilai ke total kelompok
+            hasil_kelompok[kelompok_ditemukan]["total_sw_2023"] += total_sw_2023
+            hasil_kelompok[kelompok_ditemukan]["total_sw_2024"] += total_sw_2024
+
+            # Simpan detail anggota dalam kelompok
+            hasil_kelompok[kelompok_ditemukan]["anggota"].append({
+                "kode_kantor_jr": kode_kantor,
+                "kantor_jr": kantor_jr,
+                "total_sw_2023": total_sw_2023,
+                "total_sw_2024": total_sw_2024
+            })
+
+    return hasil_kelompok
+
 @app.route('/halaman_tertuju/<kode_kantor_jr>', methods=['GET', 'POST'])
 def halaman_tertuju(kode_kantor_jr):
     kantor_jr_query = request.args.get('kantor_jr', kode_kantor_jr)
@@ -358,6 +609,20 @@ def halaman_tertuju(kode_kantor_jr):
     
     bulanan_2023, total_2023 = ambil_total_bulanan_per_kantor(previous_year, kode_kantor_jr)
     bulanan_2024, total_2024 = ambil_total_bulanan_per_kantor(current_year, kode_kantor_jr)
+    
+    total_sw_thisyear_today, total_sw_lastyear_today = ambil_total_sw_today_kantor(kode_kantor_jr)
+    
+    
+    today = datetime.now()
+    yesterday = today - timedelta(days=1)
+    
+            
+            
+    start_date_thisyear = f"01-01-{today.year}"
+    end_date_thisyear = yesterday.strftime("%d-%m-%Y")
+    start_date_lastyear = f"01-01-{today.year - 1}"
+    end_date_lastyear = (yesterday.replace(year=today.year - 1)).strftime("%d-%m-%Y")
+
     
     # Ambil tanggal dari session
     start_date_2023 = session.get('start_date_2023', '2023-01-01')
@@ -379,6 +644,8 @@ def halaman_tertuju(kode_kantor_jr):
     # Gabungkan data per kantor
     data_kantor = gabungkan_data_per_kantor(data_2023, data_2024)
     
+    data_kelompok = kelompokkan_data(data_kantor)
+    
 
 
     # Menghitung perbedaan dan perubahan persentase
@@ -393,8 +660,13 @@ def halaman_tertuju(kode_kantor_jr):
                            end_date_2023=end_date_2023,
                            start_date_2024=start_date_2024,
                            end_date_2024=end_date_2024,
-                           diff=diff, current_year=current_year, previous_year=previous_year,
+                           diff=diff, current_year=current_year, previous_year=previous_year, data_kelompok=data_kelompok,
+                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today,
+                           start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear,
+
                            percent_change=percent_change, kantor_jr=kantor_jr_query, tahun_start_date_2023=tahun_start_date_2023, tahun_start_date_2024=tahun_start_date_2024)
+
+
 
 
 @app.route('/halaman_loket')
@@ -404,7 +676,19 @@ def halaman_loket():
     
     bulanan_2023, total_2023 = ambil_total_bulanan_loket(previous_year)
     bulanan_2024, total_2024 = ambil_total_bulanan_loket(current_year)
-
+    
+    total_sw_thisyear_today, total_sw_lastyear_today = ambil_total_sw_today_loket()
+    
+    today = datetime.now()
+    yesterday = today - timedelta(days=1)
+    
+            
+            
+    start_date_thisyear = f"01-01-{today.year}"
+    end_date_thisyear = yesterday.strftime("%d-%m-%Y")
+    start_date_lastyear = f"01-01-{today.year - 1}"
+    end_date_lastyear = (yesterday.replace(year=today.year - 1)).strftime("%d-%m-%Y")
+    
     
     kabeh_sw_2023 = session.get('kabeh_sw_2023')
     kabeh_sw_2024 = session.get('kabeh_sw_2024')
@@ -419,11 +703,18 @@ def halaman_loket():
     tahun_start_date_2023 = session.get('tahun_start_date_2023')
     tahun_start_date_2024 = session.get('tahun_start_date_2024')
     
+    data_kelompok = kelompokkan_data(data_kantor_terbatas)
+    
     
     return render_template('halaman_loket.html', data_kantor_terbatas=data_kantor_terbatas, start_date_2023=start_date_2023, bulanan_2024=bulanan_2024, total_2024=total_2024,
                            end_date_2023=end_date_2023, current_year=current_year, previous_year=previous_year,
-                           start_date_2024=start_date_2024, bulanan_2023=bulanan_2023, total_2023=total_2023,
-                           end_date_2024=end_date_2024, total_jml_sw_2023_filtered=kabeh_sw_2023, total_jml_sw_2024_filtered=kabeh_sw_2024, kabeh_diff=kabeh_diff, kabeh_percent_change=kabeh_percent_change, tahun_start_date_2023=tahun_start_date_2023, tahun_start_date_2024=tahun_start_date_2024)
+                           start_date_2024=start_date_2024, bulanan_2023=bulanan_2023, total_2023=total_2023, 
+                           end_date_2024=end_date_2024, total_jml_sw_2023_filtered=kabeh_sw_2023, 
+                           total_jml_sw_2024_filtered=kabeh_sw_2024, kabeh_diff=kabeh_diff, kabeh_percent_change=kabeh_percent_change, 
+                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today,
+                           start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear,
+
+                           tahun_start_date_2023=tahun_start_date_2023, tahun_start_date_2024=tahun_start_date_2024, data_kelompok=data_kelompok)
 
 
 if __name__ == '__main__':
