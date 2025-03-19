@@ -110,6 +110,83 @@
         margin: 0; /* Ensure no margin around the body */
         padding: 0;
     }
+    .link-tambah {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #1D976C, #93F9B9); /* Gradasi hijau premium */
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 50px; /* Membuat tampilan premium */
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        border: none;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .link-tambah i {
+        margin-right: 10px; /* Jarak ikon dengan teks */
+        font-size: 20px;
+    }
+
+    /* Hover Effect */
+    .link-tambah:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Efek Klik */
+    .link-tambah:active {
+        transform: scale(0.98);
+        box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .menu-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        color: white;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        border: none;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Menu Pendapatan SW */
+    .menu-pendapatan {
+        background: linear-gradient(135deg, #28a745, #218838); /* Gradasi hijau */
+    }
+
+    .menu-pendapatan:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(135deg, #218838, #1e7e34); /* Warna lebih gelap saat hover */
+    }
+
+    /* Menu Action Plan */
+    .menu-action-plan {
+        background: linear-gradient(135deg, #ffc107, #e0a800); /* Gradasi emas */
+    }
+
+    .menu-action-plan:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+        background: linear-gradient(135deg, #e0a800, #d39e00); /* Warna lebih gelap saat hover */
+    }
+
+    /* Styling ikon */
+    .menu-link i {
+        margin-right: 10px;
+        font-size: 20px;
+    }
     </style>
 </head>
 <body>
@@ -154,6 +231,14 @@
             </div>
         </div>
         <div class="mt-4 text-center">
+            <a href="#" class="menu-link menu-pendapatan" >
+                <i class="fas fa-chart-line"></i> Pendapatan SW
+              </a>
+              
+              <!-- Link Menu Action Plan -->
+              <a href="#" class="menu-link menu-action-plan">
+                <i class="fas fa-tasks"></i> Action Plan
+              </a>
             <button id="startRefreshBtn" class="btn btn-success">Start Auto Refresh</button>
             <button id="stopRefreshBtn" class="btn btn-danger" style="display: none;">Stop Auto Refresh</button>
         </div><br><br>
