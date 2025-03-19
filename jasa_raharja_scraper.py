@@ -147,8 +147,10 @@ def ambil_total_sw_today():
     return total_sw_thisyear_today, total_sw_lastyear_today
 
 def ambil_total_sw_today_loket():
-    today = datetime.now()
-    yesterday = today - timedelta(days=1)
+    indonesia_tz = pytz.timezone('Asia/Jakarta')  # WIB (GMT+7), bisa diganti 'Asia/Makassar' untuk WITA, 'Asia/Jayapura' untuk WIT
+    today = datetime.datetime.now(indonesia_tz)
+    now = datetime.datetime.now(indonesia_tz).date()
+    yesterday = now - datetime.timedelta(days=1)
     
     # Tahun ini
     start_date_thisyear = f"{today.year}-01-01"
@@ -170,8 +172,10 @@ def ambil_total_sw_today_loket():
 
 
 def ambil_total_sw_today_kantor(kode_kantor_jr):
-    today = datetime.now()
-    yesterday = today - timedelta(days=1)
+    indonesia_tz = pytz.timezone('Asia/Jakarta')  # WIB (GMT+7), bisa diganti 'Asia/Makassar' untuk WITA, 'Asia/Jayapura' untuk WIT
+    today = datetime.datetime.now(indonesia_tz)
+    now = datetime.datetime.now(indonesia_tz).date()
+    yesterday = now - datetime.timedelta(days=1)
     
     # Tahun ini
     start_date_thisyear = f"{today.year}-01-01"
@@ -633,8 +637,11 @@ def halaman_tertuju(kode_kantor_jr):
     total_sw_thisyear_today, total_sw_lastyear_today = ambil_total_sw_today_kantor(kode_kantor_jr)
     
     
-    today = datetime.now()
-    yesterday = today - timedelta(days=1)
+    indonesia_tz = pytz.timezone('Asia/Jakarta')  # WIB (GMT+7), bisa diganti 'Asia/Makassar' untuk WITA, 'Asia/Jayapura' untuk WIT
+    today = datetime.datetime.now(indonesia_tz)
+    today_form = datetime.datetime.now(indonesia_tz).strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
+    now = datetime.datetime.now(indonesia_tz).date()
+    yesterday = now - datetime.timedelta(days=1)
     
             
             
@@ -681,7 +688,7 @@ def halaman_tertuju(kode_kantor_jr):
                            start_date_2024=start_date_2024,
                            end_date_2024=end_date_2024,
                            diff=diff, current_year=current_year, previous_year=previous_year, data_kelompok=data_kelompok,
-                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today,
+                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today, today_form=today_form,
                            start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear,
 
                            percent_change=percent_change, kantor_jr=kantor_jr_query, tahun_start_date_2023=tahun_start_date_2023, tahun_start_date_2024=tahun_start_date_2024)
@@ -699,8 +706,11 @@ def halaman_loket():
     
     total_sw_thisyear_today, total_sw_lastyear_today = ambil_total_sw_today_loket()
     
-    today = datetime.now()
-    yesterday = today - timedelta(days=1)
+    indonesia_tz = pytz.timezone('Asia/Jakarta')  # WIB (GMT+7), bisa diganti 'Asia/Makassar' untuk WITA, 'Asia/Jayapura' untuk WIT
+    today = datetime.datetime.now(indonesia_tz)
+    today_form = datetime.datetime.now(indonesia_tz).strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
+    now = datetime.datetime.now(indonesia_tz).date()
+    yesterday = now - datetime.timedelta(days=1)
     
             
             
@@ -731,7 +741,7 @@ def halaman_loket():
                            start_date_2024=start_date_2024, bulanan_2023=bulanan_2023, total_2023=total_2023, 
                            end_date_2024=end_date_2024, total_jml_sw_2023_filtered=kabeh_sw_2023, 
                            total_jml_sw_2024_filtered=kabeh_sw_2024, kabeh_diff=kabeh_diff, kabeh_percent_change=kabeh_percent_change, 
-                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today,
+                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today, today_form=today_form, 
                            start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear,
 
                            tahun_start_date_2023=tahun_start_date_2023, tahun_start_date_2024=tahun_start_date_2024, data_kelompok=data_kelompok)
