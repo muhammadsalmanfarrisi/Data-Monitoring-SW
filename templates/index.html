@@ -303,7 +303,8 @@
                     <label for="end_date_2023">End Date {{ tahun_start_date_2023 }}</label>
                     <!-- Menambahkan teks petunjuk sebelum input -->
                     <small class="form-text text-muted">Masukkan tanggal selesai pada tahun {{ tahun_start_date_2023 }}</small>
-                    <input type="date" class="form-control" id="end_date_2023" name="end_date_2023" value="{{ end_date_2023 | default(previous_year ~ '-12-31') }}">
+                    <input type="date" class="form-control" id="end_date_2023" name="end_date_2023" value="{{ end_date_2023 | default(previous_year_today) }}">
+                    
 
                 </div>
             </div>
@@ -320,7 +321,8 @@
                     <label for="end_date_2024">End Date {{ tahun_start_date_2024 }}</label>
                     <small class="form-text text-muted">Masukkan tanggal selesai pada tahun {{ tahun_start_date_2024 }}</small>
 
-                    <input type="date" class="form-control" id="end_date_2024" name="end_date_2024" value="{{ end_date_2024 | default(current_year ~ '-12-31') }}">
+                    <input type="date" class="form-control" id="end_date_2024" name="end_date_2024" value="{{ end_date_2024 | default(today_form) }}">
+                    
                 </div>
             </div>
             

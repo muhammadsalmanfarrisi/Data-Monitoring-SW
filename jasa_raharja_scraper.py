@@ -11,15 +11,28 @@ from datetime import date
 from datetime import datetime, timedelta
 from calendar import monthrange
 from concurrent.futures import ThreadPoolExecutor
-
+import datetime
+import pytz
 
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 MAX_THREADS = 5
-current_year = datetime.now().year
+indonesia_tz = pytz.timezone('Asia/Jakarta')  # WIB (GMT+7), bisa diganti 'Asia/Makassar' untuk WITA, 'Asia/Jayapura' untuk WIT
+now = datetime.datetime.now(indonesia_tz).date()
+def today_filter(value):
+    indonesia_tz = pytz.timezone("Asia/Jakarta")  # WIB, WITA, atau WIT
+    today = datetime.datetime.now(indonesia_tz).strftime("%Y-%m-%d")
+    return today
+
+# Daftarkan filter ke Jinja
+app.jinja_env.filters["today"] = today_filter
+
+current_year = datetime.datetime.now(indonesia_tz).year
 previous_year = current_year - 1
+
+
 # Fungsi untuk mengambil data dari URL dengan cookies
 def ambil_data(url, retries=3, timeout=10):
     # Membuat session untuk mengelola cookies
@@ -114,8 +127,10 @@ def ambil_total_bulanan_paralel(tahun):
         return bulanan_totals, total_jml_sw_all_years
 
 def ambil_total_sw_today():
-    today = datetime.now()
-    yesterday = today - timedelta(days=1)
+    indonesia_tz = pytz.timezone('Asia/Jakarta')  # WIB (GMT+7), bisa diganti 'Asia/Makassar' untuk WITA, 'Asia/Jayapura' untuk WIT
+    today = datetime.datetime.now(indonesia_tz)
+    now = datetime.datetime.now(indonesia_tz).date()
+    yesterday = now - datetime.timedelta(days=1)
     
     # Tahun ini
     start_date_thisyear = f"{today.year}-01-01"
@@ -290,8 +305,13 @@ def index():
     
     total_sw_thisyear_today, total_sw_lastyear_today = ambil_total_sw_today()
     
-    today = datetime.now()
-    yesterday = today - timedelta(days=1)
+    indonesia_tz = pytz.timezone('Asia/Jakarta')  # WIB (GMT+7), bisa diganti 'Asia/Makassar' untuk WITA, 'Asia/Jayapura' untuk WIT
+    today = datetime.datetime.now(indonesia_tz)
+    today_form = datetime.datetime.now(indonesia_tz).strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
+    now = datetime.datetime.now(indonesia_tz).date()
+    yesterday = now - datetime.timedelta(days=1)
+    
+    previous_year_today = today.replace(year=today.year - 1).strftime("%Y-%m-%d")  # Tahun dikurangi 1
     
             
             
@@ -379,8 +399,8 @@ def index():
                                    bulanan_2024=bulanan_2024, total_2024=total_2024, 
                                    kabeh_sw_2023=kabeh_sw_2023, kabeh_sw_2024=kabeh_sw_2024, 
                                    kabeh_diff=kabeh_diff, kabeh_percent_change=kabeh_percent_change, 
-                                   total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today, 
-                                   start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear,
+                                   total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today, today_form=today_form,
+                                   start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear, today=today, previous_year_today=previous_year_today,
                                 #    total_sw_2024_today=total_sw_2024_today, total_sw_2025_today=total_sw_2025_today,
                                 #    start_date_2024_today=start_date_2024_today, end_date_2024_today=end_date_2024_today, 
                                 #    start_date_2025_today=start_date_2025_today, end_date_2025_today=end_date_2025_today,
@@ -389,8 +409,8 @@ def index():
     return render_template('index.html', data_kantor=data_kantor, data_2023=None, data_2024=None, 
                            bulanan_2023=bulanan_2023, total_2023=total_2023, bulanan_2024=bulanan_2024, current_year=current_year, previous_year=previous_year, 
                         #    total_sw_2024_today=total_sw_2024_today, total_sw_2025_today=total_sw_2025_today, start_date_2024_today=start_date_2024_today, end_date_2024_today=end_date_2024_today, start_date_2025_today=start_date_2025_today, end_date_2025_today=end_date_2025_today,
-                           start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear,
-                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today, 
+                           start_date_thisyear=start_date_thisyear, end_date_thisyear=end_date_thisyear, start_date_lastyear=start_date_lastyear, end_date_lastyear=end_date_lastyear, previous_year_today=previous_year_today,
+                           total_sw_thisyear_today=total_sw_thisyear_today, total_sw_lastyear_today=total_sw_lastyear_today, today=today, today_form=today_form,
                            total_2024=total_2024, tahun_start_date_2023=previous_year, tahun_start_date_2024=current_year)
 
 
