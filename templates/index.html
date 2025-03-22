@@ -61,7 +61,11 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
             width: 100%;  /* Makes the container responsive */
-            height: 600px; /* Adjust the height as needed */
+            height: auto; /* Adjust the height as needed */
+        }
+        canvas {
+            width: 100% !important;
+            height: auto !important;
         }
         label {
             font-weight: 600;
@@ -190,6 +194,23 @@
 
     .display-4 {
     font-size: 3rem; /* Atur ukuran font lebih kecil */
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2rem;
+        }
+        .display-4 {
+            font-size: 2rem; 
+        }
+        .btn-primary {
+            font-size: 0.9rem;
+            padding: 8px 16px;
+        }
+        .total-sw {
+            font-size: 1.4rem;
+        }
+}
+
 }
 
     </style>
