@@ -78,7 +78,7 @@
             margin-left: 0px;
         }
         .total-sw {
-        font-size: 2rem; /* Sesuaikan ukuran sesuai kebutuhan */
+        font-size: 1.7rem; /* Sesuaikan ukuran sesuai kebutuhan */
         font-weight: bold;
         color: #333;
     }
@@ -187,6 +187,11 @@
         margin-right: 10px;
         font-size: 20px;
     }
+
+    .display-4 {
+    font-size: 3rem; /* Atur ukuran font lebih kecil */
+}
+
     </style>
 </head>
 <body>
@@ -252,13 +257,13 @@
             <div class="col-md-4">
                 <div class="card">
                     <h4><strong>Total Jml SW {{ previous_year }}:</strong></h4>
-                    <p><h5>{{ start_date_lastyear }} s/d {{ end_date_lastyear }}</h5> <br><h3><strong><span class="rupiah-value">{{ total_sw_lastyear_today }}</span></strong></h3></p>
+                    <p><h5>{{ start_date_lastyear }} s/d {{ end_date_lastyear }}</h5> <br><strong><span class="rupiah-value total-sw">{{ total_sw_lastyear_today }}</span></strong></p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card">
                     <h4><strong>Total Jml SW {{ current_year }}:</strong></h4>
-                    <p><h5>{{ start_date_thisyear }} s/d {{ end_date_thisyear }}</h5> <br><h3><strong><span class="rupiah-value">{{ total_sw_thisyear_today }}</span></strong></h3></p>
+                    <p><h5>{{ start_date_thisyear }} s/d {{ end_date_thisyear }}</h5> <br><strong><span class="rupiah-value total-sw">{{ total_sw_thisyear_today }}</span></strong></p>
                 </div>
             </div>
             <div class="col-md-4">
@@ -643,14 +648,17 @@
         </script> -->
         <script>
             function formatRupiah(value) {
-                return "Rp " + value.toLocaleString("id-ID");
+                // Ubah nilai ke dalam format mata uang dengan dua digit desimal
+                return "Rp " + value.toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
         
             // Lakukan format saat rendering halaman jika data berasal dari backend langsung.
             document.querySelectorAll(".display-4, .rupiah-value").forEach(element => {
-                element.textContent = formatRupiah(parseFloat(element.textContent.replace(/[^0-9.-]+/g,"")));
+                // Hapus karakter non-digit sebelum melakukan parsing
+                let numericValue = parseFloat(element.textContent.replace(/[^0-9.-]+/g,""));
+                // Ubah teks konten ke dalam format Rupiah dengan dua digit desimal
+                element.textContent = formatRupiah(numericValue);
             });
-            
         </script>
         <script>
             // Fungsi untuk mengatur sinkronisasi tanggal antar tahun

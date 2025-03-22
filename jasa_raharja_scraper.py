@@ -38,6 +38,23 @@ current_year = datetime.datetime.now(indonesia_tz).year
 previous_year = current_year - 1
 
 
+def format_rupiah(value):
+    try:
+        value = float(value)  # Konversi ke float jika perlu
+        formatted_value = "{:,.2f}".format(
+            value
+        )  # Format angka dengan pemisah ribuan koma
+        formatted_value = (
+            formatted_value.replace(",", "X").replace(".", ",").replace("X", ".")
+        )  # Tukar simbol dengan benar
+        return f"Rp{formatted_value}"
+    except (ValueError, TypeError):
+        return "Rp0,00"
+
+
+app.jinja_env.filters["format_rupiah"] = format_rupiah  # Daftarkan filter
+
+
 # Fungsi untuk mengambil data dari URL dengan cookies
 def ambil_data(url, retries=3, timeout=10):
     # Membuat session untuk mengelola cookies
@@ -45,13 +62,13 @@ def ambil_data(url, retries=3, timeout=10):
 
     # Menambahkan cookies yang Anda salin dari browser (Ganti dengan cookies yang relevan)
     cookies = {
-        "XSRF-TOKEN": "eyJpdiI6Iit6MnRLallCWHg1UnJhZUhpUmhISkE9PSIsInZhbHVlIjoiUElJbFAxNDZhanU3SEplMk5aeVlLV0RnYlJtL0FKdWNydHlhSVNkNmxlQTV3NU5mR3pwS0hWUnBxVUNpb3ZQY3UyYXZtTURsdHUvc3RIZUVpek9JY0JhVTN0NkgwNWRxcXIxVlhXTjZpeHZYeXFkK1ZYR3JUQzljQkQxUXc5bmYiLCJtYWMiOiJhMDIxMDk4NmE4ODZmZWFmMzFjMzMzNTRkZGUxMDVjNGM0MzI0M2YxMmRiM2YxNzY2YWNiYjc2OWUyYTIzZDgwIiwidGFnIjoiIn0%3D",
+        "XSRF-TOKEN": "eyJpdiI6ImJvdndCSk02WjNoMndHS01Rby9oeXc9PSIsInZhbHVlIjoienVRYmlUajljcElUZStkUEZMRnkvUVhqRVlBR3Bqazg1aDNEUzF3UEtIZzhWSTdrTDVjSXFyY1ZiMk90MUZVNWFhTEpJUXlPUzlLRTdwcDVZQjBWMXNrNzlTc2RKZEhwZkFRckF1dkpaWVN4c3VQbXlidzhueUNFRTFVTWtIZi8iLCJtYWMiOiI5MTc2MDZhMzlmNjI4ZTk2NGRiNTNhYjc5ZTc2NjA0ZDViNGE0NmQzZGU3OTJjYjQzOGE5NDQ0OTg1NzBhOTIxIiwidGFnIjoiIn0%3D",
         "_ga": "GA1.1.140722331.1727057868",
         "_ga_JQ088T32QP": "GS1.1.1727061610.2.1.1727061629.0.0.0",
         "_ga_VNWN27RPNX": "GS1.3.1727061611.2.0.1727061611.60.0.0",
-        "ceri_session": "eyJpdiI6ImlvdCtIMEVESllBc0xJM0Y4RnJENUE9PSIsInZhbHVlIjoiQy9MRGt3ODA5OGlKR21ZUEdnWVhFeldGVzgxZFBONzdMNU5vbHpNdlNOcWoyYk5zY0RDMGVNbHdXQUdDQkJIaDVBRUgvUTRuaE1zckYzMDBKajJVKzJFTWxXL2R0ZGpKR1J0VGFrZVRZQStJRVlmQzJUd1NydStQazA5SDJwUDgiLCJtYWMiOiIxMjY2NDdkNzI3NTgwYWU5OThmYzRjYmIwZDU4NGU4MGJjNDQwNjU1Mzk2MjZlZmVmNDU4MDRiNDg1OTZiMDA2IiwidGFnIjoiIn0%3D",
+        "ceri_session": "eyJpdiI6InRlS3UyL01QOW12ZitQT29qV0hEQUE9PSIsInZhbHVlIjoicTh1ekNoNjZNRFNjQzBycWFqYU9ieHpoeDdNLzRYdmJtbVg3TWpSajNTcDZvSmc5azRvRlgvenVWaUlBVVh2bTYwSXNnZVJyeS9UU0N0TVRBTW1EeFdYR0VqMTlMVjVsREQyano1RjgwUFV6bGJrc0VBenhyd3pwdW56eURjMXoiLCJtYWMiOiI4MjUzOTE4M2I2MzU0M2I1MzI2MWI4MDU2MWY4NDJiMDZhM2Q1Mzg5MWJhMWY0Y2RhZmU3NGUzMWI1MGVkNzI4IiwidGFnIjoiIn0%3D",
         "cookiesession1": "678B28C4BA1B09254D21278D87A606A5",
-        "jr_cookie": "98122d81101bed08eedde6cea31edd67",
+        "jr_cookie": "98122d81101bed08eedde6ceb07ade67",
         "remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d": "eyJpdiI6IlEyVEJBcW9Za2tCUFNJWFpvV2VUNGc9PSIsInZhbHVlIjoiM0NwSGwwdUVwbEVhVGtKVm5hdGJSbUxmSlpUQ0JjZkZPL0pFbEE5K3c3WmtPM3RpZHpkaUlhaldXMThRVlQzNnNKNVcxdTdaTDBMdWttOTlOUDd0cmwvQm50WXBiN2lMVlpSV213Umw2d0lpOUNaSzI4TjNoQ0xraENqRmRON3haWU1ROHVrZTlvZTdxdGM2SUtDME5BPT0iLCJtYWMiOiI0MWUxNTY1MjE5YzBiOTAxZmQwYzcwM2RkMzQwMTViYmU0NDI1OTg5MjY1NDgzZDdmYTliNTMwZWMxNDQwOGUyIiwidGFnIjoiIn0%3D",
     }
 
@@ -65,7 +82,7 @@ def ambil_data(url, retries=3, timeout=10):
 
     try:
         # Kirim permintaan GET
-        response = session.get(url, headers=headers)
+        response = session.get(url, headers=headers, timeout=timeout)
 
         if response.status_code == 200:
             try:
@@ -341,6 +358,11 @@ def gabungkan_data_per_kantor(data_2023, data_2024):
 
     # Ubah dictionary ke list untuk digunakan di template
     return list(data_kantor.values())
+
+
+@app.context_processor
+def utility_processor():
+    return dict(format_rupiah=format_rupiah)
 
 
 @app.route("/", methods=["GET", "POST"])
