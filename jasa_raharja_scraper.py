@@ -56,20 +56,20 @@ app.jinja_env.filters["format_rupiah"] = format_rupiah  # Daftarkan filter
 
 
 # Fungsi untuk mengambil data dari URL dengan cookies
-def ambil_data(url, retries=3, timeout=10):
+def ambil_data(url, retries=3):
     # Membuat session untuk mengelola cookies
     session = requests.Session()
 
     # Menambahkan cookies yang Anda salin dari browser (Ganti dengan cookies yang relevan)
     cookies = {
-        "XSRF-TOKEN": "eyJpdiI6InY1UzZML1JIOGlHdnJnT3FxWnJ5a3c9PSIsInZhbHVlIjoiYmMvWnhhTFhJZWVnczF6clJ5V09PVWx0YlFEMkFhTW85eXNPYXFUSVNzZG04eHF1a0dsTnpmZ1lwZ0NCcVZia29QbVh0YXRqNVNWZWV3cGJVSnlTQTM3TFhWT3FjYk56NDZPenhnQnhHbUk0R3F4cHgwU1hSQ1BGejA5em9DbEciLCJtYWMiOiJhOTM5YWU1OGQ3MzcwZDBlZGEwOWVmNWE2ZWMxMzc3NjNkODllNWNiZGJlYTRlNTRiOGM4ZjU0ZGM2ZjVkZDVjIiwidGFnIjoiIn0%3D",
+        "XSRF-TOKEN": "eyJpdiI6ImV4bDVvN0VJU2FVWTN6QkpGeDRGYkE9PSIsInZhbHVlIjoiNkhRV09VMUNzUDBGQVVOSDM3REhnVkNYK0J2a1ErYnV1OEJEZkZzUEZ3U2lIUHhGVlN4aXZGWWZWaG1xa0laVGpBYzkwVUkzVmFPdnhkSUcyd2Q2WkYvcjlWd1N3UkNudE9uMDM1S1Z2SEJ0RjlZclhQbVhrSGR1cjMxcEp3VnQiLCJtYWMiOiJlOWMwZTE0ZDk2YWQ1ODY4ODIxYmJmYjdmZmQ2ZDUxMDcxOTc1NTk2OTUwNWRlZGY4YjYwMDgzYjZmN2VlODA0IiwidGFnIjoiIn0%3D",
         "_ga": "GA1.1.140722331.1727057868",
         "_ga_JQ088T32QP": "GS1.1.1727061610.2.1.1727061629.0.0.0",
         "_ga_VNWN27RPNX": "GS1.3.1727061611.2.0.1727061611.60.0.0",
-        "ceri_session": "eyJpdiI6ImhHVXlsV3UxMVVBM2hzeENmTkVDdXc9PSIsInZhbHVlIjoibE1FZVh5NXRQcC9QeGtrZTFmWXJsdnFGQlcrdHRsVW9mQjJtVHRZb3I0ekJDRk0rNUd6dGQxT2hYSHY4QlhmQmFNcDVvcXBjckQxWFU0YmN6L2FLYWhIdDFpM2R3K0FhZW90RTlJbmFPRCtvWFJyMDFGL0xjN3RwbzJSdk11aG4iLCJtYWMiOiI2ZWNkYjJiODM2NmZlZGE3MjVhNzUzNzhiMWE2NDAxOGMzZDk3MDkzMmYwMjY3ODdiMzNlYjIwMTg3NDRiMDM1IiwidGFnIjoiIn0%3D",
+        "ceri_session": "eyJpdiI6Imo0MmxVbFVFbkQrUXI1RUFueTZJOFE9PSIsInZhbHVlIjoiaEdEUmdaR1VlSFNjd25kZ09uaGJzRnFZVXhybUl3cDMxcmZ6RW1OdmI0ZjlUbVg5cEVDclJySjJoQ0JjUnc4dGZKbCtTZlZIQ2hobU8ySVlVay9YTzl0R3VYYlhZYkp4czFQejhhUG0xUkhEeGFScFEwWXpJQksvQzJWM0RUT2ciLCJtYWMiOiJjZjFkYzdiY2VhYzMyY2EzNDZmYmExYTgwYWQ1YmNjZGRhZDAyYTE3ZTI5YTA5MTQ2ZmMzZWUzZmMwOGYxNDViIiwidGFnIjoiIn0%3D",
         "cookiesession1": "678B28C4BA1B09254D21278D87A606A5",
-        "jr_cookie": "98122d81101bed08eedde6ceaeb8f567",
-        "remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d": "eyJpdiI6IlhiSnkxZVViUzZXRUxtOEhrY2h0a2c9PSIsInZhbHVlIjoiT1FnTlJLSXA4SWhGcjdLcEpZWFhWbGppRHFIRTZIQlVmNFh3WStoUjE3Zk45eHA5YTEvQXRCRUxjWC9lWWpQRGJINUkvOTY0NWJhS0NIMnJqcklvMHhwVTNqdEpWemRwUDE1dDZKZHlaUnZ4dmg1UWNFb29uUGRsU3dFSlhqZ2UzaGRTY2JvSHN2VDYzeWdaS0dlMVZnPT0iLCJtYWMiOiI1OWY5ZTM1NzhiODU1MjExMjFmNmVjNmNlZDNiYzcwMjg4ZGIwMDM5NzdmNjdhYmM2OTBkNTAzMWMyNmYyNTIyIiwidGFnIjoiIn0%3D",
+        "jr_cookie": "98122d81101bed08eedde6ce1437f767",
+        "remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d": "eyJpdiI6IlJYMHpndGt4YXZwN09iM01EWHBPVHc9PSIsInZhbHVlIjoiY1F1ck1CNVF5MzZnYWt6ZXdSYVVzSmVCTjZ3YVNkUmRTWXJyVGk2RW92cWRadjJ2bkp5SVo4WGVNV3d5VHdWUDJ6VTM0SGRZNGp5elM4K1Q5R2tibmhMWTJHb25qZ245MmI3NW9zaVBOMTdjcTMyRTFtdEZmaW5yR3JQOFR0TmI1L2xQMXNPc004aVdZR2xURmRibW13PT0iLCJtYWMiOiI4OTNlZjVlMmUwOGU0ZmI0YmY4ZDRmNDNmYzgzMDMxNDVlODFhM2RmZDdiOWNkOWJiZjZjMmM3NjBlN2NhMWE0IiwidGFnIjoiIn0%3D",
     }
 
     # Update session dengan cookies
@@ -82,7 +82,7 @@ def ambil_data(url, retries=3, timeout=10):
 
     try:
         # Kirim permintaan GET
-        response = session.get(url, headers=headers, timeout=timeout)
+        response = session.get(url, headers=headers)
 
         if response.status_code == 200:
             try:
